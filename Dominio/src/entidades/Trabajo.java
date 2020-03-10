@@ -3,25 +3,75 @@
  */
 package entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author BerrySoft
  */
-public class Trabajo {
+
+@Entity
+@Table(name = "trabajos")
+public class Trabajo implements Serializable {
+    
+    @Id
+    @GeneratedValue()
+    @Column(name = "folioTrabajo")
     private int folioTrabajo;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaEstimada")
     private Date fechaEstimada;
+    
+    @Column(name = "fallaCliente")
     private String fallaCliente;
+    
+    @Column(name = "fallaEncontrada")
     private String fallaEncontrada;
+    
+    @Column(name = "razonEliminacion")
     private String razonDeEliminacion;
+    
+    @ManyToOne
+    @JoinColumn(name = "RFC")
     private Cliente cliente;
+    
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
     private Administrador administrador;
+    
+    @OneToMany()
+    @JoinColumn(name = "idConcepto")
     private List<Concepto> conceptos;
+    
+    @OneToMany()
+    @JoinColumn(name = "idTarea")
     private List<Tarea> tareas;
 
     public Trabajo() {
+    }
+
+    public Trabajo(int folioTrabajo, Date fechaEstimada, String fallaCliente, String fallaEncontrada, Cliente cliente, Administrador administrador, List<Concepto> conceptos, List<Tarea> tareas) {
+        this.folioTrabajo = folioTrabajo;
+        this.fechaEstimada = fechaEstimada;
+        this.fallaCliente = fallaCliente;
+        this.fallaEncontrada = fallaEncontrada;
+        this.cliente = cliente;
+        this.administrador = administrador;
+        this.conceptos = conceptos;
+        this.tareas = tareas;
     }
 
     public int getFolioTrabajo() {
@@ -86,6 +136,10 @@ public class Trabajo {
 
     public void setTareas(List<Tarea> tareas) {
         this.tareas = tareas;
+    }
+    
+    public boolean estaEliminado(){
+        return razonDeEliminacion.equals("");
     }
 
     @Override

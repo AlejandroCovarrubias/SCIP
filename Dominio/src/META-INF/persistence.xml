@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="db_scip" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entidades.Administrador</class>
+    <class>entidades.Cliente</class>
+    <class>entidades.Concepto</class>
+    <class>entidades.Insumo</class>
+    <class>entidades.Servicio</class>
+    <class>entidades.Tarea</class>
+    <class>entidades.Trabajador</class>
+    <class>entidades.Trabajo</class>
+    <class>entidades.Usuario</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_scip?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="sesamo"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.scripts.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.scripts.create-target" value="sampleCreate.ddl"/>
+      <property name="javax.persistence.schema-generation.scripts.drop-target" value="sampleDrop.ddl"/>
+    </properties>
+  </persistence-unit>
+</persistence>

@@ -3,15 +3,39 @@
  */
 package entidades;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import static javax.persistence.DiscriminatorType.STRING;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import javax.persistence.Table;
 
 /**
  *
  * @author BerrySoft
  */
-public class Concepto {
+
+@Entity
+@Table(name = "conceptos")
+@Inheritance(strategy = SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", discriminatorType = STRING, length = 20)
+public class Concepto implements Serializable {
+    
+    @Id
+    @GeneratedValue()
+    @Column(name = "idConcepto")
     private int idConcepto;
+    
+    @Column(name = "descripcion")
     private String descripcion;
+    
+    @Column(name = "costo")
     private double costo;
 
     public Concepto() {

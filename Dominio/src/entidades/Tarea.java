@@ -3,19 +3,50 @@
  */
 package entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author BerrySoft
  */
-public class Tarea {
+
+@Entity
+@Table(name = "tareas")
+public class Tarea implements Serializable {
+    
+    @Id
+    @GeneratedValue()
+    @Column(name = "idTarea")
     private int idTarea;
+    
+    @Column(name = "descripcion")
     private String descripcion;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaInicio")
     private Date fechaInicio;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaTerminacion")
     private Date fechaTerminacion;
+    
+    @Column(name = "duracion")
     private int duracion;
+    
+    @ManyToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
     private Trabajador asignado;
 
     public Tarea() {

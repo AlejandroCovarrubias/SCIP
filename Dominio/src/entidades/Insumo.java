@@ -3,12 +3,25 @@
  */
 package entidades;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  *
  * @author BerrySoft
  */
-public class Insumo extends Concepto{
+
+@Entity
+@Table(name = "insumos")
+public class Insumo extends Concepto implements Serializable{
+    
+    @Column(name = "cantidad")
     private int cantidad;
+
+    public Insumo() {
+    }
 
     public Insumo(int idConcepto, String descripcion, double costo) {
         super(idConcepto, descripcion, costo);

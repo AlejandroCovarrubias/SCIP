@@ -3,15 +3,32 @@
  */
 package entidades;
 
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author BerrySoft
  */
-public class Cliente {
+
+@Entity
+@Table(name = "clientes")
+public class Cliente implements Serializable {
+    
+    @Id
+    @GeneratedValue(generator = "assigned")
+    @Column(name = "RFC", length = 16)
     private String RFC;
+    
+    @Column(name = "razonSocial", length = 30)
     private String razonSocial;
+    
+    @Column(name = "correo", length = 30)
     private String correo;
 
     public Cliente() {

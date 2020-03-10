@@ -3,25 +3,58 @@
  */
 package entidades;
 
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import static javax.persistence.DiscriminatorType.STRING;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import javax.persistence.Table;
 
 /**
  *
  * @author BerrySoft
  */
-public class Usuario {
-    private int idusuario;
+
+@Entity
+@Table(name = "usuarios")
+@Inheritance(strategy = SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", discriminatorType = STRING, length = 20)
+public class Usuario implements Serializable {
+    
+    @Id
+    @GeneratedValue()
+    @Column(name = "idUsuario")
+    private int idUsuario;
+    
+    @Column(name = "nombreUsuario", length = 30)
     private String nombreUsuario;
+    
+    @Column(name = "nombre", length = 30)
     private String nombre;
+    
+    @Column(name = "apellidos", length = 40)
     private String apellidos;
+    
+    @Column(name = "contrasenia")
     private String contrasenia;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "areaTrabajo", length = 15)
     private AreaDeTrabajo adt;
 
     public Usuario() {
     }
     
     public Usuario(int idusuario, String nombreUsuario, String nombre, String apellidos, String contrasenia, AreaDeTrabajo adt) {
-        this.idusuario = idusuario;
+        this.idUsuario = idusuario;
         this.nombreUsuario = nombreUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -29,12 +62,12 @@ public class Usuario {
         this.adt = adt;
     }
 
-    public int getIdusuario() {
-        return idusuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setIdusuario(int idusuario) {
-        this.idusuario = idusuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombreUsuario() {
