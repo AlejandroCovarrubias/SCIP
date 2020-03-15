@@ -6,14 +6,16 @@ package entidades;
 import java.io.Serializable;
 import javax.persistence.Entity;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import static javax.persistence.DiscriminatorType.STRING;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,14 +25,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "conceptos")
-@Inheritance(strategy = SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo", discriminatorType = STRING, length = 20)
 public class Concepto implements Serializable {
     
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "idConcepto")
     private int idConcepto;
+    
+    @ManyToOne
+    @JoinColumn(name = "foliotrabajo", nullable = false)
+    private Trabajo trabajo;
     
     @Column(name = "descripcion")
     private String descripcion;
@@ -41,8 +47,15 @@ public class Concepto implements Serializable {
     public Concepto() {
     }
 
-    public Concepto(int idConcepto, String descripcion, double costo) {
+    public Concepto(Trabajo trabajo, String descripcion, double costo) {
+        this.trabajo = trabajo;
+        this.descripcion = descripcion;
+        this.costo = costo;
+    }
+
+    public Concepto(int idConcepto, Trabajo trabajo, String descripcion, double costo) {
         this.idConcepto = idConcepto;
+        this.trabajo = trabajo;
         this.descripcion = descripcion;
         this.costo = costo;
     }
@@ -53,6 +66,14 @@ public class Concepto implements Serializable {
 
     public void setIdConcepto(int idConcepto) {
         this.idConcepto = idConcepto;
+    }
+
+    public Trabajo getTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(Trabajo trabajo) {
+        this.trabajo = trabajo;
     }
 
     public String getDescripcion() {
@@ -74,9 +95,7 @@ public class Concepto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.idConcepto;
-        hash = 97 * hash + Objects.hashCode(this.descripcion);
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.costo) ^ (Double.doubleToLongBits(this.costo) >>> 32));
+        hash = 79 * hash + this.idConcepto;
         return hash;
     }
 
@@ -95,17 +114,13 @@ public class Concepto implements Serializable {
         if (this.idConcepto != other.idConcepto) {
             return false;
         }
-        if (Double.doubleToLongBits(this.costo) != Double.doubleToLongBits(other.costo)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Concepto{" + "idConcepto=" + idConcepto + ", descripcion=" + descripcion + ", costo=" + costo + '}';
+        return "Concepto{" + "idConcepto=" + idConcepto + ", trabajo=" + trabajo + ", descripcion=" + descripcion + ", costo=" + costo + '}';
     }
+
+    
 }

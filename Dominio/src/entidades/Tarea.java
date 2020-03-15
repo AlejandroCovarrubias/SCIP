@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,9 +29,17 @@ import javax.persistence.TemporalType;
 public class Tarea implements Serializable {
     
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "idTarea")
     private int idTarea;
+    
+    @ManyToOne
+    @JoinColumn(name = "foliotrabajo", nullable = false)
+    private Trabajo trabajo;
+    
+    @OneToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
+    private Trabajador asignado;
     
     @Column(name = "descripcion")
     private String descripcion;
@@ -44,21 +54,27 @@ public class Tarea implements Serializable {
     
     @Column(name = "duracion")
     private int duracion;
-    
-    @ManyToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
-    private Trabajador asignado;
 
     public Tarea() {
     }
 
-    public Tarea(int idTarea, String descripcion, Date fechaInicio, Date fechaTerminacion, int duracion, Trabajador asignado) {
+    public Tarea(Trabajo trabajo, Trabajador asignado, String descripcion, Date fechaInicio, Date fechaTerminacion, int duracion) {
+        this.trabajo = trabajo;
+        this.asignado = asignado;
+        this.descripcion = descripcion;
+        this.fechaInicio = fechaInicio;
+        this.fechaTerminacion = fechaTerminacion;
+        this.duracion = duracion;
+    }
+
+    public Tarea(int idTarea, String descripcion, Date fechaInicio, Date fechaTerminacion, int duracion, Trabajador asignado, Trabajo trabajo) {
         this.idTarea = idTarea;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaTerminacion = fechaTerminacion;
         this.duracion = duracion;
         this.asignado = asignado;
+        this.trabajo = trabajo;
     }
 
     public int getIdTarea() {
@@ -109,13 +125,18 @@ public class Tarea implements Serializable {
         this.asignado = asignado;
     }
 
+    public Trabajo getTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(Trabajo trabajo) {
+        this.trabajo = trabajo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.descripcion);
-        hash = 23 * hash + Objects.hashCode(this.fechaInicio);
-        hash = 23 * hash + this.duracion;
-        hash = 23 * hash + Objects.hashCode(this.asignado);
+        hash = 47 * hash + this.idTarea;
         return hash;
     }
 
@@ -131,16 +152,7 @@ public class Tarea implements Serializable {
             return false;
         }
         final Tarea other = (Tarea) obj;
-        if (this.duracion != other.duracion) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaInicio, other.fechaInicio)) {
-            return false;
-        }
-        if (!Objects.equals(this.asignado, other.asignado)) {
+        if (this.idTarea != other.idTarea) {
             return false;
         }
         return true;
@@ -148,6 +160,6 @@ public class Tarea implements Serializable {
 
     @Override
     public String toString() {
-        return "Tarea{" + "idTarea=" + idTarea + ", descripcion=" + descripcion + ", fechaInicio=" + fechaInicio + ", fechaTerminacion=" + fechaTerminacion + ", duracion=" + duracion + ", asignado=" + asignado + '}';
-    }  
+        return "Tarea{" + "idTarea=" + idTarea + ", descripcion=" + descripcion + ", fechaInicio=" + fechaInicio + ", fechaTerminacion=" + fechaTerminacion + ", duracion=" + duracion + ", asignado=" + asignado + ", trabajo=" + trabajo + '}';
+    }
 }

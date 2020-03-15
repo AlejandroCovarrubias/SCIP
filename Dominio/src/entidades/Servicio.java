@@ -19,7 +19,11 @@ public class Servicio extends Concepto implements Serializable{
     public Servicio() {
     }
 
-    public Servicio(int idConcepto, String descripcion, double costo) {
-        super(idConcepto, descripcion, costo);
+    public Servicio(Trabajo trabajo, String descripcion, double costo) {
+        super(trabajo, descripcion, costo);
+    }
+
+    public Servicio(int idConcepto, Trabajo trabajo, String descripcion, double costo) {
+        super(idConcepto, trabajo, descripcion, costo);
     }
 }

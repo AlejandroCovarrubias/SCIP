@@ -7,12 +7,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,9 +30,24 @@ import javax.persistence.TemporalType;
 public class Trabajo implements Serializable {
     
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "folioTrabajo")
     private int folioTrabajo;
+    
+    @OneToOne
+    @JoinColumn(name = "idCliente", nullable = false)
+    private Cliente cliente;
+    
+    @Column(name = "nombreDeQuienEntrega")
+    private String nombreDeQuienEntrega;
+    
+    @OneToOne
+    @JoinColumn(name = "idUsuario", nullable = false)
+    private Administrador administrador;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fechaCreacion")
+    private Date fechaCreacion;
     
     @Temporal(TemporalType.DATE)
     @Column(name = "fechaEstimada")
@@ -44,23 +62,34 @@ public class Trabajo implements Serializable {
     @Column(name = "razonEliminacion")
     private String razonDeEliminacion;
     
-    @ManyToOne
-    @JoinColumn(name = "RFC")
-    private Cliente cliente;
-    
-    @ManyToOne
-    @JoinColumn(name = "idUsuario")
-    private Administrador administrador;
-    
-    @OneToMany()
-    @JoinColumn(name = "idConcepto")
+    @OneToMany(mappedBy = "trabajo")
     private List<Concepto> conceptos;
     
-    @OneToMany()
-    @JoinColumn(name = "idTarea")
+    @OneToMany(mappedBy = "trabajo")
     private List<Tarea> tareas;
-
+    
     public Trabajo() {
+    }
+
+    public Trabajo(Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion) {
+        this.cliente = cliente;
+        this.nombreDeQuienEntrega = nombreDeQuienEntrega;
+        this.administrador = administrador;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaEstimada = fechaEstimada;
+        this.fallaCliente = fallaCliente;
+        this.fallaEncontrada = fallaEncontrada;
+        this.razonDeEliminacion = razonDeEliminacion;
+    }
+
+    public Trabajo(int folioTrabajo, Cliente cliente, Administrador administrador, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion) {
+        this.folioTrabajo = folioTrabajo;
+        this.cliente = cliente;
+        this.administrador = administrador;
+        this.fechaEstimada = fechaEstimada;
+        this.fallaCliente = fallaCliente;
+        this.fallaEncontrada = fallaEncontrada;
+        this.razonDeEliminacion = razonDeEliminacion;
     }
 
     public Trabajo(int folioTrabajo, Date fechaEstimada, String fallaCliente, String fallaEncontrada, Cliente cliente, Administrador administrador, List<Concepto> conceptos, List<Tarea> tareas) {
@@ -80,6 +109,38 @@ public class Trabajo implements Serializable {
 
     public void setFolioTrabajo(int folioTrabajo) {
         this.folioTrabajo = folioTrabajo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getNombreDeQuienEntrega() {
+        return nombreDeQuienEntrega;
+    }
+
+    public void setNombreDeQuienEntrega(String nombreDeQuienEntrega) {
+        this.nombreDeQuienEntrega = nombreDeQuienEntrega;
+    }
+
+    public Administrador getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(Administrador administrador) {
+        this.administrador = administrador;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public Date getFechaEstimada() {
@@ -106,20 +167,12 @@ public class Trabajo implements Serializable {
         this.fallaEncontrada = fallaEncontrada;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public String getRazonDeEliminacion() {
+        return razonDeEliminacion;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Administrador getAdministrador() {
-        return administrador;
-    }
-
-    public void setAdministrador(Administrador administrador) {
-        this.administrador = administrador;
+    public void setRazonDeEliminacion(String razonDeEliminacion) {
+        this.razonDeEliminacion = razonDeEliminacion;
     }
 
     public List<Concepto> getConceptos() {

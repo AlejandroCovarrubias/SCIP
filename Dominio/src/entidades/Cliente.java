@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,11 +22,14 @@ import javax.persistence.Table;
 public class Cliente implements Serializable {
     
     @Id
-    @GeneratedValue(generator = "assigned")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "idCliente")
+    private int idCliente;
+    
     @Column(name = "RFC", length = 16)
     private String RFC;
     
-    @Column(name = "razonSocial", length = 30)
+    @Column(name = "razonSocial", length = 100)
     private String razonSocial;
     
     @Column(name = "correo", length = 30)
@@ -33,13 +37,28 @@ public class Cliente implements Serializable {
 
     public Cliente() {
     }
-
+    
     public Cliente(String RFC, String razonSocial, String correo) {
         this.RFC = RFC;
         this.razonSocial = razonSocial;
         this.correo = correo;
     }
 
+    public Cliente(int idCliente, String RFC, String razonSocial, String correo) {
+        this.idCliente = idCliente;
+        this.RFC = RFC;
+        this.razonSocial = razonSocial;
+        this.correo = correo;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+    
     public String getRFC() {
         return RFC;
     }
@@ -66,8 +85,9 @@ public class Cliente implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.RFC);
+        int hash = 7;
+        hash = 13 * hash + this.idCliente;
+        hash = 13 * hash + Objects.hashCode(this.RFC);
         return hash;
     }
 
@@ -83,6 +103,9 @@ public class Cliente implements Serializable {
             return false;
         }
         final Cliente other = (Cliente) obj;
+        if (this.idCliente != other.idCliente) {
+            return false;
+        }
         if (!Objects.equals(this.RFC, other.RFC)) {
             return false;
         }

@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import static javax.persistence.InheritanceType.SINGLE_TABLE;
 import javax.persistence.Table;
 
@@ -25,12 +26,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "usuarios")
-@Inheritance(strategy = SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo", discriminatorType = STRING, length = 20)
 public class Usuario implements Serializable {
     
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "idUsuario")
     private int idUsuario;
     
@@ -51,6 +52,14 @@ public class Usuario implements Serializable {
     private AreaDeTrabajo adt;
 
     public Usuario() {
+    }
+
+    public Usuario(String nombreUsuario, String nombre, String apellidos, String contrasenia, AreaDeTrabajo adt) {
+        this.nombreUsuario = nombreUsuario;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.contrasenia = contrasenia;
+        this.adt = adt;
     }
     
     public Usuario(int idusuario, String nombreUsuario, String nombre, String apellidos, String contrasenia, AreaDeTrabajo adt) {
