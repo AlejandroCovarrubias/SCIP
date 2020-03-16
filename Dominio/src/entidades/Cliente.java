@@ -34,22 +34,27 @@ public class Cliente implements Serializable {
     
     @Column(name = "correo", length = 30)
     private String correo;
+    
+    @Column(name = "telefono", length = 30)
+    private String telefono;
 
     public Cliente() {
     }
-    
-    public Cliente(String RFC, String razonSocial, String correo) {
+
+    public Cliente(String RFC, String razonSocial, String correo, String telefono) {
         this.RFC = RFC;
         this.razonSocial = razonSocial;
         this.correo = correo;
+        this.telefono = telefono;
     }
 
-    public Cliente(int idCliente, String RFC, String razonSocial, String correo) {
+    public Cliente(int idCliente, String RFC, String razonSocial, String correo, String telefono) {
         this.idCliente = idCliente;
         this.RFC = RFC;
         this.razonSocial = razonSocial;
         this.correo = correo;
-    }
+        this.telefono = telefono;
+    }  
 
     public int getIdCliente() {
         return idCliente;
@@ -83,6 +88,14 @@ public class Cliente implements Serializable {
         this.correo = correo;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -114,6 +127,6 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "Cliente{" + "RFC=" + RFC + ", razonSocial=" + razonSocial + ", correo=" + correo + '}';
+        return "Cliente{" + "idCliente=" + idCliente + ", RFC=" + RFC + ", razonSocial=" + razonSocial + ", correo=" + correo + ", telefono=" + telefono + '}';
     }
 }

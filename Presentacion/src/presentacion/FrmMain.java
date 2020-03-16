@@ -5,7 +5,8 @@
  */
 package presentacion;
 
-import java.awt.Color;
+import controladores.*;
+import negocio.*;
 
 /**
  *
@@ -13,7 +14,12 @@ import java.awt.Color;
  */
 public class FrmMain extends javax.swing.JFrame {
     
+    private INegocio instance;
+    
     private PnlClientes pnlClientes;
+    
+    private PnlTrabajos pnlTrabajos;
+    
 
     /**
      * Creates new form FrmMain
@@ -23,7 +29,7 @@ public class FrmMain extends javax.swing.JFrame {
         this.setTitle("Sistema de Comunicación y Presupuesto");
         this.setLocationRelativeTo(null);
         this.setSize(1280, 720);
-        this.pnlClientes = new PnlClientes();
+        this.instance = NegocioSCIP.getFacade();
     }
 
     /**
@@ -296,16 +302,28 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void opt_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_trabajosMouseClicked
         pnlPrincipal.removeAll();
-        pnlPrincipal.repaint();
+        
+        this.pnlTrabajos = PnlTrabajos.getInstance(instance, this);
+        pnlTrabajos.setSize(pnlPrincipal.getSize());
+        pnlTrabajos.setBorder(pnlPrincipal.getBorder());
+        pnlPrincipal.add(pnlTrabajos);
+        pnlTrabajos.setVisible(true);
+        pnlTrabajos.revalidate();
+        pnlTrabajos.repaint();
     }//GEN-LAST:event_opt_trabajosMouseClicked
 
     private void opt_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_clientesMouseClicked
         pnlPrincipal.removeAll();
+        
+        //Consigue y ajusta el panel
+        this.pnlClientes = PnlClientes.getInstance(instance, this);
         pnlClientes.setSize(pnlPrincipal.getSize());
         pnlClientes.setBorder(pnlPrincipal.getBorder());
         pnlPrincipal.add(pnlClientes);
         pnlClientes.setVisible(true);
+        pnlClientes.revalidate();
         pnlClientes.repaint();
+        
     }//GEN-LAST:event_opt_clientesMouseClicked
 
     private void opt_reportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_reportesMouseClicked

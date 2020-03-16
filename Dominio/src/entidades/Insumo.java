@@ -23,8 +23,9 @@ public class Insumo extends Concepto implements Serializable{
     public Insumo() {
     }
 
-    public Insumo(Trabajo trabajo, String descripcion, double costo) {
+    public Insumo(int cantidad, Trabajo trabajo, String descripcion, double costo) {
         super(trabajo, descripcion, costo);
+        this.cantidad = cantidad;
     }
 
     public Insumo(int cantidad, int idConcepto, Trabajo trabajo, String descripcion, double costo) {

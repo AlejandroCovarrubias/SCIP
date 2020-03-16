@@ -20,35 +20,37 @@ public class FNegocio implements INegocio{
     
     IDatos instance;
     ControlCliente ctrlCliente;
+    ControlTrabajo ctrlTrabajo;
     
     public FNegocio(){
         instance = DatosSCIP.getFacade();
         ctrlCliente = new ControlCliente(instance);
+        ctrlTrabajo = new ControlTrabajo(instance);
     }
 
     @Override
     public String agregarTrabajo(Trabajo trabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.agregar(trabajo);
     }
 
     @Override
     public String editarTrabajo(Trabajo trabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.editar(trabajo);
     }
 
     @Override
     public String eliminarTrabajo(Trabajo trabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.eliminar(trabajo);
     }
 
     @Override
     public Trabajo getTrabajo(int folioTrabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.getTrabajo(folioTrabajo);
     }
 
     @Override
     public List<Trabajo> getTrabajos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.getTrabajos();
     }
 
     @Override

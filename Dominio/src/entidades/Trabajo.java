@@ -4,16 +4,17 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -62,6 +63,10 @@ public class Trabajo implements Serializable {
     @Column(name = "razonEliminacion")
     private String razonDeEliminacion;
     
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoTrabajo", length = 15)
+    private TipoTrabajo tipoTrabajo;
+    
     @OneToMany(mappedBy = "trabajo")
     private List<Concepto> conceptos;
     
@@ -69,9 +74,12 @@ public class Trabajo implements Serializable {
     private List<Tarea> tareas;
     
     public Trabajo() {
+        conceptos = new ArrayList<>();
+        tareas = new ArrayList<>();
     }
 
-    public Trabajo(Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion) {
+    public Trabajo(int folioTrabajo, Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion, TipoTrabajo tt, List<Concepto> conceptos, List<Tarea> tareas) {
+        this.folioTrabajo = folioTrabajo;
         this.cliente = cliente;
         this.nombreDeQuienEntrega = nombreDeQuienEntrega;
         this.administrador = administrador;
@@ -80,27 +88,36 @@ public class Trabajo implements Serializable {
         this.fallaCliente = fallaCliente;
         this.fallaEncontrada = fallaEncontrada;
         this.razonDeEliminacion = razonDeEliminacion;
+        this.tipoTrabajo = tt;
+        this.conceptos = conceptos;
+        this.tareas = tareas;
     }
 
-    public Trabajo(int folioTrabajo, Cliente cliente, Administrador administrador, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion) {
-        this.folioTrabajo = folioTrabajo;
+    public Trabajo(Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion, TipoTrabajo tt, List<Concepto> conceptos, List<Tarea> tareas) {
         this.cliente = cliente;
+        this.nombreDeQuienEntrega = nombreDeQuienEntrega;
         this.administrador = administrador;
+        this.fechaCreacion = fechaCreacion;
         this.fechaEstimada = fechaEstimada;
         this.fallaCliente = fallaCliente;
         this.fallaEncontrada = fallaEncontrada;
         this.razonDeEliminacion = razonDeEliminacion;
+        this.tipoTrabajo = tt;
+        this.conceptos = conceptos;
+        this.tareas = tareas;
     }
 
-    public Trabajo(int folioTrabajo, Date fechaEstimada, String fallaCliente, String fallaEncontrada, Cliente cliente, Administrador administrador, List<Concepto> conceptos, List<Tarea> tareas) {
+    public Trabajo(int folioTrabajo, Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion, TipoTrabajo tt) {
         this.folioTrabajo = folioTrabajo;
+        this.cliente = cliente;
+        this.nombreDeQuienEntrega = nombreDeQuienEntrega;
+        this.administrador = administrador;
+        this.fechaCreacion = fechaCreacion;
         this.fechaEstimada = fechaEstimada;
         this.fallaCliente = fallaCliente;
         this.fallaEncontrada = fallaEncontrada;
-        this.cliente = cliente;
-        this.administrador = administrador;
-        this.conceptos = conceptos;
-        this.tareas = tareas;
+        this.razonDeEliminacion = razonDeEliminacion;
+        this.tipoTrabajo = tt;
     }
 
     public int getFolioTrabajo() {
@@ -189,6 +206,14 @@ public class Trabajo implements Serializable {
 
     public void setTareas(List<Tarea> tareas) {
         this.tareas = tareas;
+    }
+
+    public TipoTrabajo getTipoTrabajo() {
+        return tipoTrabajo;
+    }
+
+    public void setTipoTrabajo(TipoTrabajo tipoTrabajo) {
+        this.tipoTrabajo = tipoTrabajo;
     }
     
     public boolean estaEliminado(){

@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package negocio;
+package presentacion;
 
 /**
  *
  * @author Alejandro Galindo
  */
-public class NegocioSCIP {
-    public static INegocio getFacade(){
-        return new FNegocio();
-    }
+public enum Modals {
+    AGREGAR, EDITAR
 }

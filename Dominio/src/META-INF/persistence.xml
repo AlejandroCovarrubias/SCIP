@@ -3,7 +3,6 @@
   <persistence-unit name="db_scip" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>entidades.Administrador</class>
-    <class>entidades.Cliente</class>
     <class>entidades.Concepto</class>
     <class>entidades.Insumo</class>
     <class>entidades.Servicio</class>
@@ -11,6 +10,7 @@
     <class>entidades.Trabajador</class>
     <class>entidades.Trabajo</class>
     <class>entidades.Usuario</class>
+    <class>entidades.Cliente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_scip?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

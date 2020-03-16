@@ -142,7 +142,7 @@ public class FDatosTest {
      */
     @Test
     public void aClientes_Agregar() throws Exception {
-        Cliente cliente = new Cliente(1, "CUPU800825569", "Tractomotores del Yaqui SA", "ulisescvpr@gmail.com");
+        Cliente cliente = new Cliente(1, "CUPU800825569", "Tractomotores del Yaqui SA", "ulisescvpr@gmail.com", "12345678");
         try {
             System.out.println("aClientes_Agregar");
             System.out.println("");
@@ -161,7 +161,7 @@ public class FDatosTest {
      */
     @Test
     public void bClientes_Editar() throws Exception {
-        Cliente cliente = new Cliente(1, "CUPU800825569", "TRACTOMOTORES DEL YAQUI SA DE CV", "ulisescvpr2020@gmail.com");
+        Cliente cliente = new Cliente(1, "CUPU800825569", "TRACTOMOTORES DEL YAQUI SA DE CV", "ulisescvpr2020@gmail.com", "12345678");
         Cliente clienteBuscado = instance.getClienteRFC("CUPU800825569");
 
         try {

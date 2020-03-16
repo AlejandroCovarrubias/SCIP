@@ -14,9 +14,6 @@ import entidades.Trabajo;
 import entidades.Usuario;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -38,27 +35,27 @@ public class FDatos implements IDatos {
 
     @Override
     public void agregarTrabajo(Trabajo trabajo) throws PreexistingEntityException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        trabajoCtrl.create(trabajo);
     }
 
     @Override
     public void editarTrabajo(Trabajo trabajo) throws NonexistentEntityException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        trabajoCtrl.edit(trabajo);
     }
 
     @Override
     public void eliminarTrabajo(Trabajo trabajo) throws NonexistentEntityException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        trabajoCtrl.destroy(trabajo.getFolioTrabajo());
     }
 
     @Override
     public Trabajo getTrabajo(int folioTrabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return trabajoCtrl.findTrabajo(folioTrabajo);
     }
 
     @Override
     public List<Trabajo> getTrabajos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return trabajoCtrl.findTrabajoEntities();
     }
 
     @Override
@@ -68,7 +65,7 @@ public class FDatos implements IDatos {
 
     @Override
     public int getTrabajosCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return trabajoCtrl.getTrabajoCount();
     }
 
     @Override
