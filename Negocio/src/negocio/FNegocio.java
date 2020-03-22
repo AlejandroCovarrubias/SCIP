@@ -9,6 +9,8 @@ import controladores.DatosSCIP;
 import controladores.IDatos;
 import entidades.Cliente;
 import entidades.Trabajo;
+import entidades.Usuario;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,11 +23,13 @@ public class FNegocio implements INegocio{
     IDatos instance;
     ControlCliente ctrlCliente;
     ControlTrabajo ctrlTrabajo;
+    ControlUsuario ctrlUsuario;
     
     public FNegocio(){
         instance = DatosSCIP.getFacade();
         ctrlCliente = new ControlCliente(instance);
         ctrlTrabajo = new ControlTrabajo(instance);
+        ctrlUsuario = new ControlUsuario(instance);
     }
 
     @Override
@@ -50,7 +54,30 @@ public class FNegocio implements INegocio{
 
     @Override
     public List<Trabajo> getTrabajos() {
-        return ctrlTrabajo.getTrabajos();
+        List<Trabajo> trabajos = ctrlTrabajo.getTrabajos();
+        List<Trabajo> aux = new ArrayList<>();
+        
+        for (Trabajo trabajo : trabajos) {
+            if(!trabajo.estaEliminado()){
+                aux.add(trabajo);
+            }
+        }
+        
+        return aux;
+    }
+    
+    @Override
+    public List<Trabajo> getTrabajosTipo(String tipo) {
+        List<Trabajo> trabajos = ctrlTrabajo.getTrabajosTipo(tipo);
+        List<Trabajo> aux = new ArrayList<>();
+        
+        for (Trabajo trabajo : trabajos) {
+            if(!trabajo.estaEliminado()){
+                aux.add(trabajo);
+            }
+        }
+        
+        return aux;
     }
 
     @Override
@@ -97,4 +124,9 @@ public class FNegocio implements INegocio{
     public int getClientesCount() {
         return ctrlCliente.getClientesCount();
     } 
+
+    @Override
+    public Usuario getUsuario(int id) {
+        return ctrlUsuario.getUsuario(id);
+    }
 }

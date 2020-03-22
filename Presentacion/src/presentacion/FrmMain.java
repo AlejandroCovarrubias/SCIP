@@ -5,6 +5,7 @@
  */
 package presentacion;
 
+import calendario.PnlCalendar;
 import controladores.*;
 import negocio.*;
 
@@ -20,6 +21,8 @@ public class FrmMain extends javax.swing.JFrame {
     
     private PnlTrabajos pnlTrabajos;
     
+    private PnlCalendar calendario;
+    
 
     /**
      * Creates new form FrmMain
@@ -30,6 +33,7 @@ public class FrmMain extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setSize(1280, 720);
         this.instance = NegocioSCIP.getFacade();
+        opt_calendarioMouseClicked(null);
     }
 
     /**
@@ -53,10 +57,10 @@ public class FrmMain extends javax.swing.JFrame {
         opt_reportes = new javax.swing.JLabel();
         opt_insumos = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        txtTitulo = new javax.swing.JLabel();
         pnlPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
@@ -230,15 +234,23 @@ public class FrmMain extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtTitulo.setFont(new java.awt.Font("Lato", 1, 36)); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1042, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(732, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pnlPrincipal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -297,11 +309,23 @@ public class FrmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void opt_calendarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_calendarioMouseClicked
-        // TODO add your handling code here:
+        pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("CALENDARIO");
+        
+        this.calendario = PnlCalendar.getInstance(instance, this, instance.getUsuario(1));
+        calendario.setSize(pnlPrincipal.getSize());
+        calendario.setBorder(pnlPrincipal.getBorder());
+        pnlPrincipal.add(calendario);
+        pnlPrincipal.setVisible(true);
+        pnlPrincipal.revalidate();
+        pnlPrincipal.repaint();
     }//GEN-LAST:event_opt_calendarioMouseClicked
 
     private void opt_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_trabajosMouseClicked
         pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("TRABAJOS");
         
         this.pnlTrabajos = PnlTrabajos.getInstance(instance, this);
         pnlTrabajos.setSize(pnlPrincipal.getSize());
@@ -314,6 +338,8 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void opt_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_clientesMouseClicked
         pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("CLIENTES");
         
         //Consigue y ajusta el panel
         this.pnlClientes = PnlClientes.getInstance(instance, this);
@@ -327,15 +353,21 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_opt_clientesMouseClicked
 
     private void opt_reportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_reportesMouseClicked
-        // TODO add your handling code here:
+        pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("REPORTES");
     }//GEN-LAST:event_opt_reportesMouseClicked
 
     private void opt_insumosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_insumosMouseClicked
-        // TODO add your handling code here:
+        pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("INSUMOS");
     }//GEN-LAST:event_opt_insumosMouseClicked
 
     private void opt_usuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_usuariosMouseClicked
-        // TODO add your handling code here:
+        pnlPrincipal.removeAll();
+        pnlPrincipal.revalidate();
+        txtTitulo.setText("USUARIOS");
     }//GEN-LAST:event_opt_usuariosMouseClicked
 
     /**
@@ -382,5 +414,6 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JLabel opt_trabajos;
     private javax.swing.JLabel opt_usuarios;
     private javax.swing.JPanel pnlPrincipal;
+    private javax.swing.JLabel txtTitulo;
     // End of variables declaration//GEN-END:variables
 }

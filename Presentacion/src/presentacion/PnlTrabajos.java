@@ -6,28 +6,39 @@
 package presentacion;
 
 import entidades.Cliente;
+import entidades.Concepto;
+import entidades.TipoTrabajo;
 import entidades.Trabajo;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import negocio.INegocio;
+import presentacion.utils.TextPrompt;
 
 /**
  *
  * @author Alejandro Galindo
  */
 public class PnlTrabajos extends javax.swing.JPanel {
-    
+
     private static PnlTrabajos instance;
-    
+
     private INegocio fachada;
-    
+
     private FrmMain parent;
-    
+
     private Trabajo trabajo;
-    
+
     private List<Trabajo> trabajos = new ArrayList<>();
+
+    private String tipoTrabajoActual = "";
 
     /**
      * Creates new form PnlTrabajos
@@ -37,34 +48,84 @@ public class PnlTrabajos extends javax.swing.JPanel {
         this.setSize(1044, 570);
         this.fachada = fachada;
         this.trabajo = new Trabajo();
-        
+        actualizarTablaFiltros(tipoTrabajoActual);
+
+        TextPrompt fecha = new TextPrompt("Fecha de Creacion", textFecha);
+        fecha.changeAlpha(0.75f);
     }
-    
-    public static PnlTrabajos getInstance(INegocio fachada, FrmMain parent){
-        if(instance == null){
+
+    public static PnlTrabajos getInstance(INegocio fachada, FrmMain parent) {
+        if (instance == null) {
             instance = new PnlTrabajos(fachada, parent);
         }
         return instance;
     }
-    
-    private void actualizarTabla() {
-        trabajos = fachada.getTrabajos();
-        vaciarTablas();
+
+    private void actualizarTablaFiltros(String tipo) {
+        if (tipo.equals("")) {
+            trabajos = fachada.getTrabajos();
+        } else {
+            trabajos = fachada.getTrabajosTipo(tipo);
+        }
+
+        System.out.println(trabajos);
+
+        vaciarTablasYCombos();
         DefaultTableModel trabajosTM = (DefaultTableModel) tablaTrabajos.getModel();
-        Object rowData[] = new Object[4];
+        Object rowData[] = new Object[6];
 
         for (int i = 0; i < trabajos.size(); i++) {
-            rowData[0] = trabajos.get(i).getFolioTrabajo();
-            rowData[1] = trabajos.get(i).getCliente().getRazonSocial();
-            rowData[2] = trabajos.get(i).getFallaCliente();
-            rowData[3] = trabajos.get(i).getTipoTrabajo();
-            trabajosTM.addRow(rowData);
+            if(!trabajos.get(i).estaEliminado()){
+                rowData[0] = trabajos.get(i).getFolioTrabajo();
+                rowData[1] = trabajos.get(i).getCliente().getRazonSocial();
+                rowData[2] = trabajos.get(i).getFallaCliente();
+                rowData[3] = trabajos.get(i).getTipoTrabajo();
+                rowData[4] = trabajos.get(i).getFechaCreacion();
+                rowData[5] = trabajos.get(i).getFechaEstimada();
+                trabajosTM.addRow(rowData);
+            }
         }
+
+        DefaultComboBoxModel dcbmFolios = (DefaultComboBoxModel) comboFolios.getModel();
+        DefaultComboBoxModel dcbmClientes = (DefaultComboBoxModel) comboClientes.getModel();
+        dcbmFolios.addElement("FOLIOS");
+        dcbmClientes.addElement("CLIENTES");
+
+        for (Trabajo trabajo : trabajos) {
+            dcbmFolios.addElement(trabajo.getFolioTrabajo());
+            dcbmClientes.addElement(trabajo.getCliente().getRazonSocial());
+        }
+        comboFolios.setModel(dcbmFolios);
+        comboClientes.setModel(dcbmClientes);
+        actualizarColumnas();
     }
 
-    private void vaciarTablas() {
+    private void vaciarTablasYCombos() {
         while (tablaTrabajos.getRowCount() > 0) {
             ((DefaultTableModel) tablaTrabajos.getModel()).removeRow(0);
+        }
+        
+        ((DefaultComboBoxModel) comboClientes.getModel()).removeAllElements();
+        
+        ((DefaultComboBoxModel) comboFolios.getModel()).removeAllElements();
+    }
+    
+    private void actualizarColumnas() {
+        tablaTrabajos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        for (int i = 0; i < tablaTrabajos.getColumnCount(); i++) {
+            DefaultTableColumnModel colModel = (DefaultTableColumnModel) tablaTrabajos.getColumnModel();
+            TableColumn col = colModel.getColumn(i);
+            int width = 0;
+
+            TableCellRenderer renderer = col.getHeaderRenderer();
+            for (int r = 0; r < tablaTrabajos.getRowCount(); r++) {
+                renderer = tablaTrabajos.getCellRenderer(r, i);
+                Component comp = renderer.getTableCellRendererComponent(tablaTrabajos, tablaTrabajos.getValueAt(r, i),
+                        false, false, r, i);
+                width = Math.max(width, comp.getPreferredSize().width);
+            }
+            col.setPreferredWidth(width + 14);
         }
     }
 
@@ -88,6 +149,10 @@ public class PnlTrabajos extends javax.swing.JPanel {
         btn_Preventivo = new javax.swing.JButton();
         btn_Total = new javax.swing.JButton();
         btn_Parcial = new javax.swing.JButton();
+        textFecha = new javax.swing.JTextField();
+        comboFolios = new javax.swing.JComboBox<>();
+        comboClientes = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -119,14 +184,14 @@ public class PnlTrabajos extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Folio", "Cliente", "Falla", "Tipo"
+                "#", "Cliente", "Falla", "Tipo", "Fecha de Creación", "Fecha Estimada de Entrega"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -156,30 +221,57 @@ public class PnlTrabajos extends javax.swing.JPanel {
         btn_Todos.setMaximumSize(new java.awt.Dimension(190, 40));
         btn_Todos.setMinimumSize(new java.awt.Dimension(190, 40));
         btn_Todos.setPreferredSize(new java.awt.Dimension(190, 40));
+        btn_Todos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TodosActionPerformed(evt);
+            }
+        });
 
         btn_Evaluativo.setFont(new java.awt.Font("Lato", 1, 14)); // NOI18N
         btn_Evaluativo.setText("EVALUATIVO");
         btn_Evaluativo.setMaximumSize(new java.awt.Dimension(190, 40));
         btn_Evaluativo.setMinimumSize(new java.awt.Dimension(190, 40));
         btn_Evaluativo.setPreferredSize(new java.awt.Dimension(190, 40));
+        btn_Evaluativo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EvaluativoActionPerformed(evt);
+            }
+        });
 
         btn_Preventivo.setFont(new java.awt.Font("Lato", 1, 14)); // NOI18N
         btn_Preventivo.setText("PREVENTIVO");
         btn_Preventivo.setMaximumSize(new java.awt.Dimension(190, 40));
         btn_Preventivo.setMinimumSize(new java.awt.Dimension(190, 40));
         btn_Preventivo.setPreferredSize(new java.awt.Dimension(190, 40));
+        btn_Preventivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_PreventivoActionPerformed(evt);
+            }
+        });
 
         btn_Total.setFont(new java.awt.Font("Lato", 1, 14)); // NOI18N
         btn_Total.setText("REPARACIÓN TOTAL");
         btn_Total.setMaximumSize(new java.awt.Dimension(190, 40));
         btn_Total.setMinimumSize(new java.awt.Dimension(190, 40));
         btn_Total.setPreferredSize(new java.awt.Dimension(190, 40));
+        btn_Total.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_TotalActionPerformed(evt);
+            }
+        });
 
         btn_Parcial.setFont(new java.awt.Font("Lato", 1, 14)); // NOI18N
         btn_Parcial.setText("REPARACIÓN PARCIAL");
         btn_Parcial.setMaximumSize(new java.awt.Dimension(190, 40));
         btn_Parcial.setMinimumSize(new java.awt.Dimension(190, 40));
         btn_Parcial.setPreferredSize(new java.awt.Dimension(190, 40));
+        btn_Parcial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ParcialActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -208,7 +300,15 @@ public class PnlTrabajos extends javax.swing.JPanel {
                                 .addComponent(btn_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
                                 .addComponent(btn_Parcial, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(textFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comboFolios, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1)))))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
@@ -223,7 +323,13 @@ public class PnlTrabajos extends javax.swing.JPanel {
                     .addComponent(btn_Parcial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(comboFolios)
+                    .addComponent(textFecha)
+                    .addComponent(comboClientes)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(opt_Eliminar)
                     .addComponent(opt_Editar)
@@ -234,30 +340,61 @@ public class PnlTrabajos extends javax.swing.JPanel {
 
     private void opt_EliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_EliminarMouseClicked
         int index = tablaTrabajos.getSelectedRow();
-        if(index >= 0){
-            
-        }else{
+        if (index >= 0) {
+            int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas eliminar este trabajo?", "Confirmación", JOptionPane.YES_NO_OPTION);
+            if(showConfirmDialog == JOptionPane.YES_OPTION){
+                String razonDeEliminacion = JOptionPane.showInputDialog(this, "Especifica la causa o razón de la eliminación de este trabajo", "Razón de Eliminación", JOptionPane.QUESTION_MESSAGE);
+                trabajos.get(index).setRazonDeEliminacion(razonDeEliminacion);
+                
+                fachada.editarTrabajo(trabajos.get(index));
+            }
+        } else {
             JOptionPane.showMessageDialog(this, "Escoge un Trabajo de la lista", "No se puede eliminar", JOptionPane.OK_OPTION);
         }
-        actualizarTabla();
+        actualizarTablaFiltros(tipoTrabajoActual);
     }//GEN-LAST:event_opt_EliminarMouseClicked
 
     private void opt_EditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_EditarMouseClicked
         int index = tablaTrabajos.getSelectedRow();
-        if(index >= 0){
-            
-        }else{
+        if (index >= 0) {
+            DlgTrabajos dlgTrabajos = new DlgTrabajos(parent, true, Modals.EDITAR, trabajos.get(index), fachada);
+            dlgTrabajos.setVisible(true);
+        } else {
             JOptionPane.showMessageDialog(this, "Escoge un Trabajo de la lista", "No se puede editar", JOptionPane.OK_OPTION);
         }
-        actualizarTabla();
+        actualizarTablaFiltros(tipoTrabajoActual);
     }//GEN-LAST:event_opt_EditarMouseClicked
 
     private void opt_AgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_AgregarMouseClicked
         DlgTrabajos dlgTrabajos = new DlgTrabajos(parent, true, Modals.AGREGAR, new Trabajo(), fachada);
         dlgTrabajos.setVisible(true);
-        actualizarTabla();
+        actualizarTablaFiltros(tipoTrabajoActual);
     }//GEN-LAST:event_opt_AgregarMouseClicked
 
+    private void btn_TodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TodosActionPerformed
+        tipoTrabajoActual = "";
+        actualizarTablaFiltros(tipoTrabajoActual);
+    }//GEN-LAST:event_btn_TodosActionPerformed
+
+    private void btn_EvaluativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EvaluativoActionPerformed
+        tipoTrabajoActual = TipoTrabajo.EVALUATIVO.toString();
+        actualizarTablaFiltros(TipoTrabajo.EVALUATIVO.toString());
+    }//GEN-LAST:event_btn_EvaluativoActionPerformed
+
+    private void btn_PreventivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PreventivoActionPerformed
+        tipoTrabajoActual = TipoTrabajo.PREVENTIVO.toString();
+        actualizarTablaFiltros(TipoTrabajo.PREVENTIVO.toString());
+    }//GEN-LAST:event_btn_PreventivoActionPerformed
+
+    private void btn_TotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TotalActionPerformed
+        tipoTrabajoActual = TipoTrabajo.TOTAL.toString();
+        actualizarTablaFiltros(TipoTrabajo.TOTAL.toString());
+    }//GEN-LAST:event_btn_TotalActionPerformed
+
+    private void btn_ParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ParcialActionPerformed
+        tipoTrabajoActual = TipoTrabajo.PARCIAL.toString();
+        actualizarTablaFiltros(TipoTrabajo.PARCIAL.toString());
+    }//GEN-LAST:event_btn_ParcialActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Evaluativo;
@@ -265,11 +402,15 @@ public class PnlTrabajos extends javax.swing.JPanel {
     private javax.swing.JButton btn_Preventivo;
     private javax.swing.JButton btn_Todos;
     private javax.swing.JButton btn_Total;
+    private javax.swing.JComboBox<String> comboClientes;
+    private javax.swing.JComboBox<String> comboFolios;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel opt_Agregar;
     private javax.swing.JLabel opt_Editar;
     private javax.swing.JLabel opt_Eliminar;
     private javax.swing.JTable tablaTrabajos;
+    private javax.swing.JTextField textFecha;
     // End of variables declaration//GEN-END:variables
 }

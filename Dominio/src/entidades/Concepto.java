@@ -35,7 +35,7 @@ public class Concepto implements Serializable {
     private int idConcepto;
     
     @ManyToOne
-    @JoinColumn(name = "foliotrabajo", nullable = false)
+    @JoinColumn(name = "foliotrabajo")
     private Trabajo trabajo;
     
     @Column(name = "descripcion")

@@ -34,11 +34,11 @@ public class Tarea implements Serializable {
     private int idTarea;
     
     @ManyToOne
-    @JoinColumn(name = "foliotrabajo", nullable = false)
+    @JoinColumn(name = "foliotrabajo")
     private Trabajo trabajo;
     
     @OneToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "idUsuario")
     private Trabajador asignado;
     
     @Column(name = "descripcion")

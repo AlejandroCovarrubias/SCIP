@@ -84,6 +84,17 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 }
             }
             
+            String tipo = trabajo.getTipoTrabajo().toString();
+            if(tipo.equals("EVALUATIVO")){
+                radioEvaluativo.setSelected(true);
+            }else if(tipo.equals("PREVENTIVO")){
+                radioPreventivo.setSelected(true);
+            }else if(tipo.equals("TOTAL")){
+                radioTotal.setSelected(true);
+            }else if(tipo.equals("PARCIAL")){
+                radioParcial.setSelected(true);
+            }
+            
             actualizarTablaConceptos();
             //Poner los conceptos
         }
@@ -521,7 +532,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
             String[] split = textFechaEstimada.getText().split("/");
             trabajo.setCliente(clientes.get(comboClientes.getSelectedIndex()));
             trabajo.setNombreDeQuienEntrega(textNombreEntrega.getText());
-            trabajo.setAdministrador(new Administrador());
+            trabajo.setAdministrador((Administrador) fachada.getUsuario(1));
             trabajo.setFechaCreacion(new Date());
             trabajo.setFechaEstimada(new Date(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2])));
             trabajo.setFallaCliente(textArea_Descrita.getText());
@@ -539,7 +550,28 @@ public class DlgTrabajos extends javax.swing.JDialog {
             
             resultado = fachada.agregarTrabajo(trabajo);
         } else if (modal == Modals.EDITAR) {
-
+            Trabajo trabajoTemp = this.trabajo;
+            
+            String[] split = textFechaEstimada.getText().split("/");
+            trabajoTemp.setCliente(clientes.get(comboClientes.getSelectedIndex()));
+            trabajoTemp.setNombreDeQuienEntrega(textNombreEntrega.getText());
+            trabajoTemp.setAdministrador((Administrador) fachada.getUsuario(1));
+            trabajoTemp.setFechaCreacion(new Date());
+            trabajoTemp.setFechaEstimada(new Date(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2])));
+            trabajoTemp.setFallaCliente(textArea_Descrita.getText());
+            trabajoTemp.setFallaEncontrada(textArea_Localizada.getText());
+            
+            if(radioEvaluativo.isSelected()){
+                trabajoTemp.setTipoTrabajo(TipoTrabajo.EVALUATIVO);
+            }else if(radioTotal.isSelected()){
+                trabajoTemp.setTipoTrabajo(TipoTrabajo.TOTAL);
+            }else if(radioParcial.isSelected()){
+                trabajoTemp.setTipoTrabajo(TipoTrabajo.PARCIAL);
+            }else if(radioPreventivo.isSelected()){
+                trabajoTemp.setTipoTrabajo(TipoTrabajo.PREVENTIVO);
+            }
+            
+            resultado = fachada.editarTrabajo(trabajoTemp);
         }
         JOptionPane.showMessageDialog(this, resultado, this.modal.toString(), JOptionPane.INFORMATION_MESSAGE);
         if (validar.equals("")) {
@@ -566,9 +598,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
 
     private void btn_AniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AniadirActionPerformed
         if(!check_Insumo.isSelected()){
-            this.trabajo.getConceptos().add(new Servicio(trabajo, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
+            this.trabajo.getConceptos().add(new Servicio(null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
         }else{
-            this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), trabajo, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
+            this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
         }
         text_Concepto.setText("");
         text_Cantidad.setText("");

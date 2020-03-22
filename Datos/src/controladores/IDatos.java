@@ -22,6 +22,7 @@ public interface IDatos {
     void eliminarTrabajo(Trabajo trabajo) throws NonexistentEntityException, Exception;
     Trabajo getTrabajo(int folioTrabajo);
     List<Trabajo> getTrabajos();
+    List<Trabajo> getTrabajosTipo(String tipo);
     List<Trabajo> getTrabajosFecha(Date fecha);
     int getTrabajosCount();
     
@@ -34,13 +35,19 @@ public interface IDatos {
     List<Cliente> getClientes();
     int getClientesCount();
     
-    //Insumos
-    void agregarInsumo(Insumo insumo) throws PreexistingEntityException, Exception;
-    void editarInsumo(Insumo insumo) throws NonexistentEntityException, Exception;
-    void eliminarInsumo(Insumo insumo) throws NonexistentEntityException, Exception;
+    //Conceptos
+    void agregarConcepto(Concepto concepto) throws PreexistingEntityException, Exception;
+    void editarConcepto(Concepto concepto) throws NonexistentEntityException, Exception;
+    void eliminarConcepto(Concepto concepto) throws NonexistentEntityException, Exception;
+    Concepto getConcepto(int idConcepto);
+    Concepto getConceptoTipo(String tipo);
+    List<Concepto> getConceptos();
+    List<Concepto> getConceptosTipo(String tipo);
+    List<Concepto> getConceptosTrabajo(int folioTrabajo);
     
     //Usuarios
     void agregarUsuario(Usuario usuario) throws PreexistingEntityException, Exception;
+    Usuario getUsuario(int idUsuario);
     
     //Tareas
     void agregarTarea(Tarea tarea) throws PreexistingEntityException, Exception;

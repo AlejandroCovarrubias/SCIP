@@ -24,7 +24,7 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author Alejandro Galindo
  */
-class TrabajoController implements Serializable {
+public class TrabajoController implements Serializable {
 
     public TrabajoController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -231,6 +231,19 @@ class TrabajoController implements Serializable {
             em.close();
         }
     }
+    
+    public List<Trabajo> findTrabajoEntititiesType(String type){
+        List<Trabajo> ftes = findTrabajoEntities();
+        List<Trabajo> aux = new ArrayList<>();
+        
+        for (Trabajo fte : ftes) {
+            if(fte.getTipoTrabajo().toString().equals(type)){
+                aux.add(fte);
+            }
+        }
+        
+        return aux; 
+    }
 
     public Trabajo findTrabajo(int id) {
         EntityManager em = getEntityManager();
@@ -253,5 +266,5 @@ class TrabajoController implements Serializable {
             em.close();
         }
     }
-    
+
 }

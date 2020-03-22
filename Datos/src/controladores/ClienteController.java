@@ -129,19 +129,6 @@ class ClienteController implements Serializable {
             em.close();
         }
     }
-
-    public int getClienteCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Cliente> rt = cq.from(Cliente.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
     
     public Cliente findClienteRFC(String RFC){
         EntityManager em = getEntityManager();
@@ -154,6 +141,19 @@ class ClienteController implements Serializable {
             }
             return null;
         }finally{
+            em.close();
+        }
+    }
+
+    public int getClienteCount() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Cliente> rt = cq.from(Cliente.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
             em.close();
         }
     }

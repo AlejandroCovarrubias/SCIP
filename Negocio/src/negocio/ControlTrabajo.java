@@ -7,7 +7,9 @@ package negocio;
 
 import controladores.*;
 import controladores.exceptions.*;
+import entidades.Concepto;
 import entidades.Trabajo;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,11 +23,12 @@ public class ControlTrabajo {
         instance = facade;
     }
     
-    String agregar(Trabajo trabajo){
+    String agregar(Trabajo trabajo){    
         try {
-            instance.agregarTrabajo(trabajo);
+            instance.agregarTrabajo(trabajo);         
         } catch (Exception ex) {
             if(ex instanceof PreexistingEntityException){
+                ex.printStackTrace();
                 return ex.getMessage();
             }else{
                 return "No se pudo agregar. Intente nuevamente.";
@@ -65,6 +68,14 @@ public class ControlTrabajo {
     }
     
     List<Trabajo> getTrabajos(){
+        return instance.getTrabajos();
+    }
+    
+    List<Trabajo> getTrabajosTipo(String tipo){
+        return instance.getTrabajosTipo(tipo);
+    }
+    
+    List<Trabajo> getTrabajosFecha(Date fecha){
         return instance.getTrabajos();
     }
     

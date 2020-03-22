@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,7 +44,7 @@ public class Trabajo implements Serializable {
     private String nombreDeQuienEntrega;
     
     @OneToOne
-    @JoinColumn(name = "idUsuario", nullable = false)
+    @JoinColumn(name = "idUsuario", nullable = true)
     private Administrador administrador;
     
     @Temporal(TemporalType.DATE)
@@ -68,14 +69,12 @@ public class Trabajo implements Serializable {
     private TipoTrabajo tipoTrabajo;
     
     @OneToMany(mappedBy = "trabajo")
-    private List<Concepto> conceptos;
+    private List<Concepto> conceptos = new ArrayList<>();
     
     @OneToMany(mappedBy = "trabajo")
-    private List<Tarea> tareas;
+    private List<Tarea> tareas = new ArrayList<>();
     
     public Trabajo() {
-        conceptos = new ArrayList<>();
-        tareas = new ArrayList<>();
     }
 
     public Trabajo(int folioTrabajo, Cliente cliente, String nombreDeQuienEntrega, Administrador administrador, Date fechaCreacion, Date fechaEstimada, String fallaCliente, String fallaEncontrada, String razonDeEliminacion, TipoTrabajo tt, List<Concepto> conceptos, List<Tarea> tareas) {
@@ -217,7 +216,14 @@ public class Trabajo implements Serializable {
     }
     
     public boolean estaEliminado(){
-        return razonDeEliminacion.equals("");
+        if(razonDeEliminacion == null){
+            return false;
+        }else{
+            if(razonDeEliminacion.equals("")){
+                return false;
+            }
+            return true;
+        }
     }
 
     @Override

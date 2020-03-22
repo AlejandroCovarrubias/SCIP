@@ -13,15 +13,17 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entidades.Trabajo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author Alejandro Galindo
  */
-class ConceptoController implements Serializable {
+public class ConceptoController implements Serializable {
 
     public ConceptoController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -141,6 +143,19 @@ class ConceptoController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Concepto> findConceptoEntitiesFolioTrabajo(int folio){
+        List<Concepto> fces = findConceptoEntities();
+        List<Concepto> aux = new ArrayList<>();
+        
+        for (Concepto conc : fces) {
+            if(conc.getTrabajo().getFolioTrabajo() == folio){
+                aux.add(conc);
+            }
+        }
+        
+        return aux; 
     }
 
     public Concepto findConcepto(int id) {

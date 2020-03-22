@@ -8,6 +8,7 @@ package controladores;
 import controladores.exceptions.NonexistentEntityException;
 import controladores.exceptions.PreexistingEntityException;
 import entidades.Cliente;
+import entidades.Concepto;
 import entidades.Insumo;
 import entidades.Tarea;
 import entidades.Trabajo;
@@ -26,15 +27,28 @@ public class FDatos implements IDatos {
     private EntityManagerFactory emf;
     private TrabajoController trabajoCtrl;
     private ClienteController clienteCtrl;
+    private UsuarioController usuarioCtrl;
+    private ConceptoController conceptoCtrl;
 
     public FDatos() {
         emf = Persistence.createEntityManagerFactory("db_scip");
         this.trabajoCtrl = new TrabajoController(emf);
         this.clienteCtrl = new ClienteController(emf);
+        this.usuarioCtrl = new UsuarioController(emf);
+        this.conceptoCtrl = new ConceptoController(emf);
     }
 
     @Override
     public void agregarTrabajo(Trabajo trabajo) throws PreexistingEntityException, Exception {
+        int antes = conceptoCtrl.getConceptoCount();
+        for (Concepto concepto : trabajo.getConceptos()) {
+            conceptoCtrl.create(concepto);
+        }
+        
+        List<Concepto> temp = conceptoCtrl.findConceptoEntities(trabajo.getConceptos().size(), antes);
+        
+        trabajo.setConceptos(temp);
+        
         trabajoCtrl.create(trabajo);
     }
 
@@ -55,7 +69,24 @@ public class FDatos implements IDatos {
 
     @Override
     public List<Trabajo> getTrabajos() {
-        return trabajoCtrl.findTrabajoEntities();
+        List<Trabajo> fte = trabajoCtrl.findTrabajoEntities();
+        
+        for (Trabajo trabajo : fte) {
+            trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
+        }
+        
+        return fte;
+    }
+    
+    @Override
+    public List<Trabajo> getTrabajosTipo(String tipo) {
+        List<Trabajo> fte = trabajoCtrl.findTrabajoEntititiesType(tipo);
+        
+        for (Trabajo trabajo : fte) {
+            trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
+        }
+        
+        return fte;
     }
 
     @Override
@@ -104,23 +135,53 @@ public class FDatos implements IDatos {
     }
 
     @Override
-    public void agregarInsumo(Insumo insumo) throws PreexistingEntityException, Exception {
+    public void agregarConcepto(Concepto concepto) throws PreexistingEntityException, Exception {
+        conceptoCtrl.create(concepto);
+    }
+
+    @Override
+    public void editarConcepto(Concepto concepto) throws NonexistentEntityException, Exception {
+        conceptoCtrl.edit(concepto);
+    }
+
+    @Override
+    public void eliminarConcepto(Concepto concepto) throws NonexistentEntityException, Exception {
+        conceptoCtrl.destroy(concepto.getIdConcepto());
+    }
+
+    @Override
+    public Concepto getConcepto(int idConcepto) {
+        return conceptoCtrl.findConcepto(idConcepto);
+    }
+
+    @Override
+    public Concepto getConceptoTipo(String tipo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editarInsumo(Insumo insumo) throws NonexistentEntityException, Exception {
+    public List<Concepto> getConceptos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void eliminarInsumo(Insumo insumo) throws NonexistentEntityException, Exception {
+    public List<Concepto> getConceptosTipo(String tipo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Concepto> getConceptosTrabajo(int folioTrabajo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void agregarUsuario(Usuario usuario) throws PreexistingEntityException, Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Usuario getUsuario(int idUsuario) {
+        return usuarioCtrl.findUsuario(idUsuario);
     }
 
     @Override

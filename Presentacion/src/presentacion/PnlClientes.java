@@ -42,6 +42,7 @@ public class PnlClientes extends javax.swing.JPanel {
         this.setSize(1044, 570);
         this.fachada = fachada;
         this.cliente = new Cliente();
+        this.parent = parent;
         actualizarTabla();
     }
     
