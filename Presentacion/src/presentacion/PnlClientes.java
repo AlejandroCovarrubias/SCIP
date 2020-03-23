@@ -50,26 +50,8 @@ public class PnlClientes extends javax.swing.JPanel {
         if(instance == null){
             instance = new PnlClientes(fachada, parent);
         }
+        instance.actualizarTabla();
         return instance;
-    }
-    
-    private void actualizarColumnas() {
-        tablaClientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        for (int i = 0; i < tablaClientes.getColumnCount(); i++) {
-            DefaultTableColumnModel colModel = (DefaultTableColumnModel) tablaClientes.getColumnModel();
-            TableColumn col = colModel.getColumn(i);
-            int width = 0;
-
-            TableCellRenderer renderer = col.getHeaderRenderer();
-            for (int r = 0; r < tablaClientes.getRowCount(); r++) {
-                renderer = tablaClientes.getCellRenderer(r, i);
-                Component comp = renderer.getTableCellRendererComponent(tablaClientes, tablaClientes.getValueAt(r, i),
-                        false, false, r, i);
-                width = Math.max(width, comp.getPreferredSize().width);
-            }
-            col.setPreferredWidth(width + 14);
-        }
     }
 
     private void actualizarTabla() {

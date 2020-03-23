@@ -59,13 +59,11 @@
                           </Group>
                           <Component id="jScrollPane2" alignment="1" min="-2" pref="995" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="textFecha" min="-2" pref="200" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="comboFolios" min="-2" pref="160" max="-2" attributes="0"/>
+                              <Component id="comboFolios" min="-2" pref="94" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="comboClientes" min="-2" pref="280" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="opt_Buscar" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -89,10 +87,9 @@
               <Component id="jScrollPane2" min="-2" pref="240" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="comboFolios" max="32767" attributes="0"/>
-                  <Component id="textFecha" max="32767" attributes="0"/>
-                  <Component id="comboClientes" max="32767" attributes="0"/>
-                  <Component id="jLabel1" max="32767" attributes="0"/>
+                  <Component id="opt_Buscar" max="32767" attributes="0"/>
+                  <Component id="comboClientes" alignment="0" max="32767" attributes="0"/>
+                  <Component id="comboFolios" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="81" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -289,8 +286,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ParcialActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="textFecha">
-    </Component>
     <Component class="javax.swing.JComboBox" name="comboFolios">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -311,12 +306,15 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="opt_Buscar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/icon_search.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="opt_BuscarMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

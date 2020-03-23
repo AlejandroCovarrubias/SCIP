@@ -6,7 +6,7 @@
 package presentacion;
 
 import calendario.PnlCalendar;
-import controladores.*;
+import javax.swing.JOptionPane;
 import negocio.*;
 
 /**
@@ -56,8 +56,11 @@ public class FrmMain extends javax.swing.JFrame {
         opt_usuarios = new javax.swing.JLabel();
         opt_reportes = new javax.swing.JLabel();
         opt_insumos = new javax.swing.JLabel();
+        opt_salir = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         txtTitulo = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         pnlPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -191,6 +194,20 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
+        opt_salir.setFont(new java.awt.Font("Lato", 1, 18)); // NOI18N
+        opt_salir.setForeground(new java.awt.Color(153, 153, 153));
+        opt_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_exit.png"))); // NOI18N
+        opt_salir.setText("SALIR");
+        opt_salir.setIconTextGap(20);
+        opt_salir.setMaximumSize(new java.awt.Dimension(220, 50));
+        opt_salir.setMinimumSize(new java.awt.Dimension(220, 50));
+        opt_salir.setPreferredSize(new java.awt.Dimension(220, 50));
+        opt_salir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                opt_salirMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -208,7 +225,8 @@ public class FrmMain extends javax.swing.JFrame {
                             .addComponent(opt_trabajos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(opt_clientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(opt_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(opt_insumos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(opt_insumos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(opt_salir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -228,13 +246,23 @@ public class FrmMain extends javax.swing.JFrame {
                 .addComponent(opt_insumos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(opt_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addComponent(opt_salir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtTitulo.setFont(new java.awt.Font("Lato", 1, 36)); // NOI18N
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_account.png"))); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Lato", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("HUEMAC");
+        jLabel3.setToolTipText("");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -243,13 +271,20 @@ public class FrmMain extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(732, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 397, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(22, 22, 22))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTitulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -349,7 +384,6 @@ public class FrmMain extends javax.swing.JFrame {
         pnlClientes.setVisible(true);
         pnlClientes.revalidate();
         pnlClientes.repaint();
-        
     }//GEN-LAST:event_opt_clientesMouseClicked
 
     private void opt_reportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_reportesMouseClicked
@@ -369,6 +403,14 @@ public class FrmMain extends javax.swing.JFrame {
         pnlPrincipal.revalidate();
         txtTitulo.setText("USUARIOS");
     }//GEN-LAST:event_opt_usuariosMouseClicked
+
+    private void opt_salirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_salirMouseClicked
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Quieres cerrar la aplicación?", "Salir del sistema", JOptionPane.YES_NO_OPTION);
+        
+        if(confirm == JOptionPane.YES_OPTION){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_opt_salirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -402,6 +444,8 @@ public class FrmMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -411,6 +455,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JLabel opt_clientes;
     private javax.swing.JLabel opt_insumos;
     private javax.swing.JLabel opt_reportes;
+    private javax.swing.JLabel opt_salir;
     private javax.swing.JLabel opt_trabajos;
     private javax.swing.JLabel opt_usuarios;
     private javax.swing.JPanel pnlPrincipal;

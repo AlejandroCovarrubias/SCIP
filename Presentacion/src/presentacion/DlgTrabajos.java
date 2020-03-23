@@ -12,6 +12,9 @@ import entidades.Insumo;
 import entidades.Servicio;
 import entidades.TipoTrabajo;
 import entidades.Trabajo;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +35,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
     private Trabajo trabajo;
 
     private Modals modal;
-    
+
+    private FrmMain parent;
+
     private List<Cliente> clientes = new ArrayList<>();
 
     /**
@@ -42,6 +47,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(parent);
+        this.parent = (FrmMain) parent;
 
         this.fachada = fachada;
         this.trabajo = trabajo;
@@ -55,53 +61,70 @@ public class DlgTrabajos extends javax.swing.JDialog {
             TextPrompt folio = new TextPrompt("FOLIO DE TRABAJO", textFolio);
             folio.changeAlpha(0.75f);
             textFolio.setEnabled(false);
-            
+
             TextPrompt entrega = new TextPrompt("NOMBRE DE QUIEN ENTREGA", textNombreEntrega);
             entrega.changeAlpha(0.75f);
-            
+
+            Date todayDate = new Date();
+
+            datePicker.setDate(
+                    Instant.ofEpochMilli(todayDate.getTime())
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+
         } else if (mode == Modals.EDITAR) {
             txtModal.setText("EDITAR TRABAJO");
             btnModal.setText("EDITAR");
             this.setTitle("EDITAR TRABAJO");
-            
+
             TextPrompt concepto = new TextPrompt("CONCEPTO", text_Concepto);
             concepto.changeAlpha(0.75f);
-            
+
             TextPrompt costo = new TextPrompt("COSTO", text_Costo);
             costo.changeAlpha(0.75f);
-            
+
             TextPrompt cantidad = new TextPrompt("CANTIDAD", text_Cantidad);
             cantidad.changeAlpha(0.75f);
-            
+
             textFolio.setText("" + trabajo.getFolioTrabajo());
+            textFolio.setEnabled(false);
             textNombreEntrega.setText(trabajo.getNombreDeQuienEntrega());
             textArea_Descrita.setText(trabajo.getFallaCliente());
             textArea_Localizada.setText(trabajo.getFallaEncontrada());
             
+            datePicker.setDate(
+                    Instant.ofEpochMilli(trabajo.getFechaEstimada().getTime())
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+
             for (int i = 0; i < clientes.size(); i++) {
-                if(clientes.get(i).equals(trabajo.getCliente())){
+                if (clientes.get(i).equals(trabajo.getCliente())) {
                     comboClientes.setSelectedIndex(i);
                 }
             }
-            
+
             String tipo = trabajo.getTipoTrabajo().toString();
-            if(tipo.equals("EVALUATIVO")){
+            if (tipo.equals("EVALUATIVO")) {
                 radioEvaluativo.setSelected(true);
-            }else if(tipo.equals("PREVENTIVO")){
+            } else if (tipo.equals("PREVENTIVO")) {
                 radioPreventivo.setSelected(true);
-            }else if(tipo.equals("TOTAL")){
+            } else if (tipo.equals("TOTAL")) {
                 radioTotal.setSelected(true);
-            }else if(tipo.equals("PARCIAL")){
+            } else if (tipo.equals("PARCIAL")) {
                 radioParcial.setSelected(true);
             }
-            
+
             actualizarTablaConceptos();
             //Poner los conceptos
         }
     }
 
-    private String validar() {
-        return "";
+    private String validarFecha() {
+        if (datePicker.getDateStringOrEmptyString().equals("")) {
+            return "Fecha con formato incorrecto";
+        } else {
+            return "";
+        }
     }
 
     private void listaClientes() {
@@ -112,20 +135,20 @@ public class DlgTrabajos extends javax.swing.JDialog {
         }
         comboClientes.setModel(dml);
     }
-    
+
     private void actualizarTablaConceptos() {
         List<Concepto> conceptos = trabajo.getConceptos();
         vaciarTablas();
-        
+
         DefaultTableModel conceptosTM = (DefaultTableModel) tablaConceptos.getModel();
         Object rowData[] = new Object[3];
 
         for (int i = 0; i < conceptos.size(); i++) {
-            if(conceptos.get(i) instanceof Insumo){
+            if (conceptos.get(i) instanceof Insumo) {
                 rowData[0] = conceptos.get(i).getDescripcion();
-                rowData[1] = ((Insumo)conceptos.get(i)).getCantidad();
+                rowData[1] = ((Insumo) conceptos.get(i)).getCantidad();
                 rowData[2] = conceptos.get(i).getCosto();
-            }else{
+            } else {
                 rowData[0] = conceptos.get(i).getDescripcion();
                 rowData[1] = "";
                 rowData[2] = conceptos.get(i).getCosto();
@@ -133,7 +156,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
             conceptosTM.addRow(rowData);
         }
     }
-    
+
     private void vaciarTablas() {
         while (tablaConceptos.getRowCount() > 0) {
             ((DefaultTableModel) tablaConceptos.getModel()).removeRow(0);
@@ -150,6 +173,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         txtModal = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -164,7 +188,6 @@ public class DlgTrabajos extends javax.swing.JDialog {
         comboClientes = new javax.swing.JComboBox<>();
         opt_AgregarCliente = new javax.swing.JLabel();
         textNombreEntrega = new javax.swing.JTextField();
-        textFechaEstimada = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -186,6 +209,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
         text_Cantidad = new javax.swing.JTextField();
         btnModal = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        datePicker = new com.github.lgooddatepicker.components.DatePicker();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -228,6 +254,11 @@ public class DlgTrabajos extends javax.swing.JDialog {
         comboClientes.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
 
         opt_AgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_add_2.png"))); // NOI18N
+        opt_AgregarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                opt_AgregarClienteMouseClicked(evt);
+            }
+        });
 
         textNombreEntrega.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
 
@@ -280,9 +311,6 @@ public class DlgTrabajos extends javax.swing.JDialog {
                     .addComponent(textNombreEntrega))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        textFechaEstimada.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
-        textFechaEstimada.setText("2020/03/15");
 
         jLabel1.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel1.setText("Fecha estimada de entrega:");
@@ -414,7 +442,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
                         .addComponent(text_Cantidad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Aniadir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Modificar)
@@ -460,6 +488,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
             }
         });
 
+        datePicker.setBackground(new java.awt.Color(255, 255, 255));
+        datePicker.setFont(new java.awt.Font("Lato", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -468,22 +499,22 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtModal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textFechaEstimada, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnModal)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtModal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(datePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -492,8 +523,8 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtModal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textFechaEstimada)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -529,49 +560,62 @@ public class DlgTrabajos extends javax.swing.JDialog {
         String resultado = "";
         String validar = "";
         if (modal == Modals.AGREGAR) {
-            String[] split = textFechaEstimada.getText().split("/");
-            trabajo.setCliente(clientes.get(comboClientes.getSelectedIndex()));
-            trabajo.setNombreDeQuienEntrega(textNombreEntrega.getText());
-            trabajo.setAdministrador((Administrador) fachada.getUsuario(1));
-            trabajo.setFechaCreacion(new Date());
-            trabajo.setFechaEstimada(new Date(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2])));
-            trabajo.setFallaCliente(textArea_Descrita.getText());
-            trabajo.setFallaEncontrada(textArea_Localizada.getText());
-            
-            if(radioEvaluativo.isSelected()){
-                trabajo.setTipoTrabajo(TipoTrabajo.EVALUATIVO);
-            }else if(radioTotal.isSelected()){
-                trabajo.setTipoTrabajo(TipoTrabajo.TOTAL);
-            }else if(radioParcial.isSelected()){
-                trabajo.setTipoTrabajo(TipoTrabajo.PARCIAL);
-            }else if(radioPreventivo.isSelected()){
-                trabajo.setTipoTrabajo(TipoTrabajo.PREVENTIVO);
+            validar = validarFecha();
+
+            if (validar.equals("")) {
+                trabajo.setCliente(clientes.get(comboClientes.getSelectedIndex()));
+                trabajo.setNombreDeQuienEntrega(textNombreEntrega.getText());
+                trabajo.setAdministrador((Administrador) fachada.getUsuario(1));
+                trabajo.setFechaCreacion(new Date());
+                Date dateEstimada = Date.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                trabajo.setFechaEstimada(dateEstimada);
+                trabajo.setFallaCliente(textArea_Descrita.getText());
+                trabajo.setFallaEncontrada(textArea_Localizada.getText());
+
+                if (radioEvaluativo.isSelected()) {
+                    trabajo.setTipoTrabajo(TipoTrabajo.EVALUATIVO);
+                } else if (radioTotal.isSelected()) {
+                    trabajo.setTipoTrabajo(TipoTrabajo.TOTAL);
+                } else if (radioParcial.isSelected()) {
+                    trabajo.setTipoTrabajo(TipoTrabajo.PARCIAL);
+                } else if (radioPreventivo.isSelected()) {
+                    trabajo.setTipoTrabajo(TipoTrabajo.PREVENTIVO);
+                }
+
+                resultado = fachada.agregarTrabajo(trabajo);
+            } else {
+                resultado = validar;
             }
-            
-            resultado = fachada.agregarTrabajo(trabajo);
         } else if (modal == Modals.EDITAR) {
-            Trabajo trabajoTemp = this.trabajo;
-            
-            String[] split = textFechaEstimada.getText().split("/");
-            trabajoTemp.setCliente(clientes.get(comboClientes.getSelectedIndex()));
-            trabajoTemp.setNombreDeQuienEntrega(textNombreEntrega.getText());
-            trabajoTemp.setAdministrador((Administrador) fachada.getUsuario(1));
-            trabajoTemp.setFechaCreacion(new Date());
-            trabajoTemp.setFechaEstimada(new Date(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2])));
-            trabajoTemp.setFallaCliente(textArea_Descrita.getText());
-            trabajoTemp.setFallaEncontrada(textArea_Localizada.getText());
-            
-            if(radioEvaluativo.isSelected()){
-                trabajoTemp.setTipoTrabajo(TipoTrabajo.EVALUATIVO);
-            }else if(radioTotal.isSelected()){
-                trabajoTemp.setTipoTrabajo(TipoTrabajo.TOTAL);
-            }else if(radioParcial.isSelected()){
-                trabajoTemp.setTipoTrabajo(TipoTrabajo.PARCIAL);
-            }else if(radioPreventivo.isSelected()){
-                trabajoTemp.setTipoTrabajo(TipoTrabajo.PREVENTIVO);
+            validar = validarFecha();
+
+            if (validar.equals("")) {
+                Trabajo trabajoTemp = this.trabajo;
+
+                //            String[] split = textFechaEstimada.getText().split("/");
+                trabajoTemp.setCliente(clientes.get(comboClientes.getSelectedIndex()));
+                trabajoTemp.setNombreDeQuienEntrega(textNombreEntrega.getText());
+                trabajoTemp.setAdministrador((Administrador) fachada.getUsuario(1));
+                trabajoTemp.setFechaCreacion(new Date());
+                Date dateEstimada = Date.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                trabajoTemp.setFechaEstimada(dateEstimada);
+                trabajoTemp.setFallaCliente(textArea_Descrita.getText());
+                trabajoTemp.setFallaEncontrada(textArea_Localizada.getText());
+
+                if (radioEvaluativo.isSelected()) {
+                    trabajoTemp.setTipoTrabajo(TipoTrabajo.EVALUATIVO);
+                } else if (radioTotal.isSelected()) {
+                    trabajoTemp.setTipoTrabajo(TipoTrabajo.TOTAL);
+                } else if (radioParcial.isSelected()) {
+                    trabajoTemp.setTipoTrabajo(TipoTrabajo.PARCIAL);
+                } else if (radioPreventivo.isSelected()) {
+                    trabajoTemp.setTipoTrabajo(TipoTrabajo.PREVENTIVO);
+                }
+
+                resultado = fachada.editarTrabajo(trabajoTemp);
+            } else {
+                resultado = validar;
             }
-            
-            resultado = fachada.editarTrabajo(trabajoTemp);
         }
         JOptionPane.showMessageDialog(this, resultado, this.modal.toString(), JOptionPane.INFORMATION_MESSAGE);
         if (validar.equals("")) {
@@ -597,9 +641,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
     }//GEN-LAST:event_check_InsumoActionPerformed
 
     private void btn_AniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AniadirActionPerformed
-        if(!check_Insumo.isSelected()){
+        if (!check_Insumo.isSelected()) {
             this.trabajo.getConceptos().add(new Servicio(null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
-        }else{
+        } else {
             this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
         }
         text_Concepto.setText("");
@@ -607,6 +651,12 @@ public class DlgTrabajos extends javax.swing.JDialog {
         text_Costo.setText("");
         actualizarTablaConceptos();
     }//GEN-LAST:event_btn_AniadirActionPerformed
+
+    private void opt_AgregarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_AgregarClienteMouseClicked
+        DlgClientes dlgClientes = new DlgClientes(parent, true, Modals.AGREGAR, new Cliente(), this.fachada);
+        dlgClientes.setVisible(true);
+        listaClientes();
+    }//GEN-LAST:event_opt_AgregarClienteMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -617,6 +667,8 @@ public class DlgTrabajos extends javax.swing.JDialog {
     private javax.swing.JButton btn_Quitar;
     private javax.swing.JCheckBox check_Insumo;
     private javax.swing.JComboBox<String> comboClientes;
+    private com.github.lgooddatepicker.components.DatePicker datePicker;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -639,7 +691,6 @@ public class DlgTrabajos extends javax.swing.JDialog {
     private javax.swing.JTable tablaConceptos;
     private javax.swing.JTextArea textArea_Descrita;
     private javax.swing.JTextArea textArea_Localizada;
-    private javax.swing.JTextField textFechaEstimada;
     private javax.swing.JTextField textFolio;
     private javax.swing.JTextField textNombreEntrega;
     private javax.swing.JTextField text_Cantidad;

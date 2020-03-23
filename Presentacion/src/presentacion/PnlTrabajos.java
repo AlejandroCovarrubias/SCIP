@@ -5,11 +5,10 @@
  */
 package presentacion;
 
-import entidades.Cliente;
-import entidades.Concepto;
 import entidades.TipoTrabajo;
 import entidades.Trabajo;
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -20,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import negocio.INegocio;
-import presentacion.utils.TextPrompt;
 
 /**
  *
@@ -49,15 +47,13 @@ public class PnlTrabajos extends javax.swing.JPanel {
         this.fachada = fachada;
         this.trabajo = new Trabajo();
         actualizarTablaFiltros(tipoTrabajoActual);
-
-        TextPrompt fecha = new TextPrompt("Fecha de Creacion", textFecha);
-        fecha.changeAlpha(0.75f);
     }
 
     public static PnlTrabajos getInstance(INegocio fachada, FrmMain parent) {
         if (instance == null) {
             instance = new PnlTrabajos(fachada, parent);
         }
+        instance.actualizarTablaFiltros("");
         return instance;
     }
 
@@ -68,11 +64,11 @@ public class PnlTrabajos extends javax.swing.JPanel {
             trabajos = fachada.getTrabajosTipo(tipo);
         }
 
-        System.out.println(trabajos);
-
         vaciarTablasYCombos();
         DefaultTableModel trabajosTM = (DefaultTableModel) tablaTrabajos.getModel();
         Object rowData[] = new Object[6];
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         for (int i = 0; i < trabajos.size(); i++) {
             if(!trabajos.get(i).estaEliminado()){
@@ -80,8 +76,8 @@ public class PnlTrabajos extends javax.swing.JPanel {
                 rowData[1] = trabajos.get(i).getCliente().getRazonSocial();
                 rowData[2] = trabajos.get(i).getFallaCliente();
                 rowData[3] = trabajos.get(i).getTipoTrabajo();
-                rowData[4] = trabajos.get(i).getFechaCreacion();
-                rowData[5] = trabajos.get(i).getFechaEstimada();
+                rowData[4] = formatter.format(trabajos.get(i).getFechaCreacion());
+                rowData[5] = formatter.format(trabajos.get(i).getFechaEstimada());
                 trabajosTM.addRow(rowData);
             }
         }
@@ -149,10 +145,9 @@ public class PnlTrabajos extends javax.swing.JPanel {
         btn_Preventivo = new javax.swing.JButton();
         btn_Total = new javax.swing.JButton();
         btn_Parcial = new javax.swing.JButton();
-        textFecha = new javax.swing.JTextField();
         comboFolios = new javax.swing.JComboBox<>();
         comboClientes = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
+        opt_Buscar = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -271,7 +266,12 @@ public class PnlTrabajos extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
+        opt_Buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
+        opt_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                opt_BuscarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -302,13 +302,11 @@ public class PnlTrabajos extends javax.swing.JPanel {
                                 .addComponent(btn_Parcial, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(textFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboFolios, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboFolios, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(opt_Buscar)))))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
@@ -325,10 +323,9 @@ public class PnlTrabajos extends javax.swing.JPanel {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboFolios)
-                    .addComponent(textFecha)
+                    .addComponent(opt_Buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(comboClientes)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(comboFolios))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(opt_Eliminar)
@@ -396,6 +393,10 @@ public class PnlTrabajos extends javax.swing.JPanel {
         actualizarTablaFiltros(TipoTrabajo.PARCIAL.toString());
     }//GEN-LAST:event_btn_ParcialActionPerformed
 
+    private void opt_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_BuscarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_opt_BuscarMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Evaluativo;
     private javax.swing.JButton btn_Parcial;
@@ -404,13 +405,12 @@ public class PnlTrabajos extends javax.swing.JPanel {
     private javax.swing.JButton btn_Total;
     private javax.swing.JComboBox<String> comboClientes;
     private javax.swing.JComboBox<String> comboFolios;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel opt_Agregar;
+    private javax.swing.JLabel opt_Buscar;
     private javax.swing.JLabel opt_Editar;
     private javax.swing.JLabel opt_Eliminar;
     private javax.swing.JTable tablaTrabajos;
-    private javax.swing.JTextField textFecha;
     // End of variables declaration//GEN-END:variables
 }
