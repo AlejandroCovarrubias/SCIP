@@ -70,12 +70,24 @@ public class DlgClientes extends javax.swing.JDialog {
             mensaje = mensaje + "El Nombre o Razon social no puede ser mayor a 100 caracteres \n\r";
         }
         
+        if(textRazon.getText().length() == 0 ) {
+            mensaje = mensaje + "Ingrese un nombre o razon social \n\r";
+        }
+        
         if (textTelefono.getText().length() > 30) {
             mensaje = mensaje + "El Telefono no puede ser mayor a 30 caracteres \n\r";
         }
         
+        if (textTelefono.getText().length() == 0) {
+            mensaje = mensaje + "Ingrese un telefono \n\r";
+        }
+        
         if (textCorreo.getText().length() > 30) {
             mensaje = mensaje + "El Correo no puede ser mayor a 30 caracteres \n\r";
+        }
+        
+        if (textCorreo.getText().length() == 0) {
+            mensaje = mensaje + "Ingrese un Correo \n\r";
         }
 
         if (!textRFC.getText().matches("^[a-zA-Z]{3,4}(\\d{6})((\\D|\\d){2,3})?$")) {

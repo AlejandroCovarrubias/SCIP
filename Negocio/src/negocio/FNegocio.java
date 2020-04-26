@@ -84,6 +84,20 @@ public class FNegocio implements INegocio{
     public List<Trabajo> getTrabajosFecha(Date fecha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public List<Trabajo> getTrabajosCliente(String cliente) {
+        List<Trabajo> trabajos = ctrlTrabajo.getTrabajosCliente(cliente);
+        List<Trabajo> aux = new ArrayList<>();
+        
+        for (Trabajo trabajo : trabajos) {
+            if(!trabajo.estaEliminado()){
+                aux.add(trabajo);
+            }
+        }
+        
+        return aux;
+    }
 
     @Override
     public int getTrabajosCount() {

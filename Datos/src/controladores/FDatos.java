@@ -44,11 +44,11 @@ public class FDatos implements IDatos {
         for (Concepto concepto : trabajo.getConceptos()) {
             conceptoCtrl.create(concepto);
         }
-        
+
         List<Concepto> temp = conceptoCtrl.findConceptoEntities(trabajo.getConceptos().size(), antes);
-        
+
         trabajo.setConceptos(temp);
-        
+
         trabajoCtrl.create(trabajo);
     }
 
@@ -70,28 +70,39 @@ public class FDatos implements IDatos {
     @Override
     public List<Trabajo> getTrabajos() {
         List<Trabajo> fte = trabajoCtrl.findTrabajoEntities();
-        
+
         for (Trabajo trabajo : fte) {
             trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
         }
-        
+
         return fte;
     }
-    
+
     @Override
     public List<Trabajo> getTrabajosTipo(String tipo) {
-        List<Trabajo> fte = trabajoCtrl.findTrabajoEntititiesType(tipo);
-        
+        List<Trabajo> fte = trabajoCtrl.findTrabajoEntitiesType(tipo);
+
         for (Trabajo trabajo : fte) {
             trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
         }
-        
+
         return fte;
     }
 
     @Override
     public List<Trabajo> getTrabajosFecha(Date fecha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public List<Trabajo> getTrabajosCliente(String cliente){
+        List<Trabajo> fte = trabajoCtrl.findTrabajoEntititesClient(cliente);
+        
+        for (Trabajo trabajo : fte) {
+            trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
+        }
+        
+        return fte;
     }
 
     @Override
@@ -178,7 +189,7 @@ public class FDatos implements IDatos {
     public void agregarUsuario(Usuario usuario) throws PreexistingEntityException, Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public Usuario getUsuario(int idUsuario) {
         return usuarioCtrl.findUsuario(idUsuario);

@@ -62,6 +62,15 @@ public class DlgTrabajos extends javax.swing.JDialog {
             folio.changeAlpha(0.75f);
             textFolio.setEnabled(false);
 
+            TextPrompt concepto = new TextPrompt("CONCEPTO", text_Concepto);
+            concepto.changeAlpha(0.75f);
+
+            TextPrompt costo = new TextPrompt("COSTO", text_Costo);
+            costo.changeAlpha(0.75f);
+
+            TextPrompt cantidad = new TextPrompt("CANTIDAD", text_Cantidad);
+            cantidad.changeAlpha(0.75f);
+
             TextPrompt entrega = new TextPrompt("NOMBRE DE QUIEN ENTREGA", textNombreEntrega);
             entrega.changeAlpha(0.75f);
 
@@ -71,6 +80,10 @@ public class DlgTrabajos extends javax.swing.JDialog {
                     Instant.ofEpochMilli(todayDate.getTime())
                             .atZone(ZoneId.systemDefault())
                             .toLocalDate());
+
+            //Lo pone seleccionado por default, y como no te deja deseleccionar, siempre tendra tipo
+            //Estaba pensado pero no lo pusimos
+            radioEvaluativo.setSelected(true);
 
         } else if (mode == Modals.EDITAR) {
             txtModal.setText("EDITAR TRABAJO");
@@ -91,7 +104,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
             textNombreEntrega.setText(trabajo.getNombreDeQuienEntrega());
             textArea_Descrita.setText(trabajo.getFallaCliente());
             textArea_Localizada.setText(trabajo.getFallaEncontrada());
-            
+
             datePicker.setDate(
                     Instant.ofEpochMilli(trabajo.getFechaEstimada().getTime())
                             .atZone(ZoneId.systemDefault())
@@ -120,6 +133,9 @@ public class DlgTrabajos extends javax.swing.JDialog {
     }
 
     private String validarFecha() {
+        Date fechaActual = new Date();
+        Date fechaSeleccionada;
+
         if (datePicker.getDateStringOrEmptyString().equals("")) {
             return "Fecha con formato incorrecto";
         } else {
@@ -161,6 +177,21 @@ public class DlgTrabajos extends javax.swing.JDialog {
         while (tablaConceptos.getRowCount() > 0) {
             ((DefaultTableModel) tablaConceptos.getModel()).removeRow(0);
         }
+    }
+
+    private String validar() {
+        String mensaje = "";
+
+        mensaje = mensaje + validarFecha();
+
+        if (textArea_Descrita.getText().equals("")) {
+            mensaje = mensaje + "Escriba la falla del cliente l\n\r";
+        }
+        if (textArea_Localizada.getText().equals("")) {
+            mensaje = mensaje + "Escriba la falla localizada \n\r";
+        }
+
+        return mensaje;
     }
 
     /**
@@ -217,19 +248,19 @@ public class DlgTrabajos extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        txtModal.setFont(new java.awt.Font("Lato", 1, 24)); // NOI18N
         txtModal.setText("MODALIDAD");
+        txtModal.setFont(new java.awt.Font("Lato", 1, 24)); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jLabel2.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel2.setText("#");
+        jLabel2.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         textFolio.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel3.setText("Tipo:");
+        jLabel3.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         radioEvaluativo.setBackground(new java.awt.Color(255, 255, 255));
         btnGroup.add(radioEvaluativo);
@@ -312,26 +343,26 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel1.setText("Fecha estimada de entrega:");
+        jLabel1.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jLabel4.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel4.setText("FALLA DESCRITA POR EL CLIENTE");
+        jLabel4.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         textArea_Descrita.setColumns(20);
-        textArea_Descrita.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         textArea_Descrita.setRows(5);
+        textArea_Descrita.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(textArea_Descrita);
 
-        jLabel6.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel6.setText("FALLA LOCALIZADA");
+        jLabel6.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         textArea_Localizada.setColumns(20);
-        textArea_Localizada.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         textArea_Localizada.setRows(5);
+        textArea_Localizada.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         jScrollPane2.setViewportView(textArea_Localizada);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -364,8 +395,8 @@ public class DlgTrabajos extends javax.swing.JDialog {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jLabel7.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         jLabel7.setText("DESGLOSE DE COSTOS");
+        jLabel7.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
 
         tablaConceptos.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         tablaConceptos.setModel(new javax.swing.table.DefaultTableModel(
@@ -399,30 +430,40 @@ public class DlgTrabajos extends javax.swing.JDialog {
 
         text_Costo.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
 
-        check_Insumo.setBackground(new java.awt.Color(255, 255, 255));
         check_Insumo.setText("INSUMO");
+        check_Insumo.setBackground(new java.awt.Color(255, 255, 255));
         check_Insumo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 check_InsumoActionPerformed(evt);
             }
         });
 
-        btn_Aniadir.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btn_Aniadir.setText("AÑADIR");
+        btn_Aniadir.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btn_Aniadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_AniadirActionPerformed(evt);
             }
         });
 
-        btn_Quitar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btn_Quitar.setText("QUITAR");
+        btn_Quitar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
+        btn_Quitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_QuitarActionPerformed(evt);
+            }
+        });
 
-        btn_Modificar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btn_Modificar.setText("MODIFICAR");
+        btn_Modificar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
+        btn_Modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ModificarActionPerformed(evt);
+            }
+        });
 
-        text_Cantidad.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
         text_Cantidad.setEnabled(false);
+        text_Cantidad.setFont(new java.awt.Font("Lato", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -442,7 +483,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
                         .addComponent(text_Cantidad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Aniadir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Modificar)
@@ -472,16 +513,16 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        btnModal.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btnModal.setText("MODALIDAD");
+        btnModal.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btnModal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModalActionPerformed(evt);
             }
         });
 
-        btnCancelar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btnCancelar.setText("CANCELAR");
+        btnCancelar.setFont(new java.awt.Font("Lato", 1, 12)); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -546,7 +587,10 @@ public class DlgTrabajos extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -560,12 +604,12 @@ public class DlgTrabajos extends javax.swing.JDialog {
         String resultado = "";
         String validar = "";
         if (modal == Modals.AGREGAR) {
-            validar = validarFecha();
+            validar = validar();
 
             if (validar.equals("")) {
                 trabajo.setCliente(clientes.get(comboClientes.getSelectedIndex()));
                 trabajo.setNombreDeQuienEntrega(textNombreEntrega.getText());
-                trabajo.setAdministrador((Administrador) fachada.getUsuario(1));
+                trabajo.setAdministrador((Administrador) fachada.getUsuario(1)); //Necesita haber un usuario
                 trabajo.setFechaCreacion(new Date());
                 Date dateEstimada = Date.from(datePicker.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 trabajo.setFechaEstimada(dateEstimada);
@@ -587,7 +631,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
                 resultado = validar;
             }
         } else if (modal == Modals.EDITAR) {
-            validar = validarFecha();
+            validar = validar();
 
             if (validar.equals("")) {
                 Trabajo trabajoTemp = this.trabajo;
@@ -614,7 +658,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
 
                 resultado = fachada.editarTrabajo(trabajoTemp);
             } else {
-                resultado = validar;
+                resultado = validar();
             }
         }
         JOptionPane.showMessageDialog(this, resultado, this.modal.toString(), JOptionPane.INFORMATION_MESSAGE);
@@ -641,15 +685,23 @@ public class DlgTrabajos extends javax.swing.JDialog {
     }//GEN-LAST:event_check_InsumoActionPerformed
 
     private void btn_AniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AniadirActionPerformed
-        if (!check_Insumo.isSelected()) {
-            this.trabajo.getConceptos().add(new Servicio(null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
-        } else {
-            this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
+        if (!text_Concepto.getText().equals("") && !text_Costo.getText().equals("") && text_Costo.getText().matches("^\\d+.?\\d+$")) {
+            if (!check_Insumo.isSelected()) {
+                this.trabajo.getConceptos().add(new Servicio(null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
+            } else {
+                if (!text_Cantidad.getText().equals("") || text_Cantidad.getText().matches("^\\d+")) {
+                    this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
+                }else{
+                    JOptionPane.showMessageDialog(this, "Coloque una cantidad no decimal", "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            text_Concepto.setText("");
+            text_Cantidad.setText("");
+            text_Costo.setText("");
+            actualizarTablaConceptos();
+        }else{
+            JOptionPane.showMessageDialog(this, "Rellene todos los campos", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
-        text_Concepto.setText("");
-        text_Cantidad.setText("");
-        text_Costo.setText("");
-        actualizarTablaConceptos();
     }//GEN-LAST:event_btn_AniadirActionPerformed
 
     private void opt_AgregarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_AgregarClienteMouseClicked
@@ -657,6 +709,14 @@ public class DlgTrabajos extends javax.swing.JDialog {
         dlgClientes.setVisible(true);
         listaClientes();
     }//GEN-LAST:event_opt_AgregarClienteMouseClicked
+
+    private void btn_ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ModificarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ModificarActionPerformed
+
+    private void btn_QuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_QuitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_QuitarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

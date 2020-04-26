@@ -79,6 +79,10 @@ public class ControlTrabajo {
         return instance.getTrabajos();
     }
     
+    List<Trabajo> getTrabajosCliente(String cliente){
+        return instance.getTrabajosCliente(cliente);
+    }
+    
     int getTrabajosCount(){
         return instance.getTrabajosCount();
     }

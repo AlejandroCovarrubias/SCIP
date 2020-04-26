@@ -5,6 +5,7 @@
  */
 package presentacion;
 
+import entidades.Cliente;
 import entidades.TipoTrabajo;
 import entidades.Trabajo;
 import java.awt.Component;
@@ -36,6 +37,8 @@ public class PnlTrabajos extends javax.swing.JPanel {
 
     private List<Trabajo> trabajos = new ArrayList<>();
 
+    private List<Cliente> clientes = new ArrayList<>();
+
     private String tipoTrabajoActual = "";
 
     /**
@@ -46,6 +49,7 @@ public class PnlTrabajos extends javax.swing.JPanel {
         this.setSize(1044, 570);
         this.fachada = fachada;
         this.trabajo = new Trabajo();
+        establecer();
         actualizarTablaFiltros(tipoTrabajoActual);
     }
 
@@ -57,9 +61,31 @@ public class PnlTrabajos extends javax.swing.JPanel {
         return instance;
     }
 
+    private void establecer() {
+        trabajos = fachada.getTrabajos();
+        //No seria lo mismo porque solo estoy agarrando clientes validos
+        DefaultComboBoxModel dcbmClientes = (DefaultComboBoxModel) comboClientes.getModel();
+        dcbmClientes.addElement("CLIENTES");
+
+        for (Trabajo trabajo : trabajos) {
+            if (!clientes.contains(trabajo.getCliente())) {
+                clientes.add(trabajo.getCliente());
+                dcbmClientes.addElement(trabajo.getCliente().getRazonSocial());
+            }
+        }
+
+        comboClientes.setModel(dcbmClientes);
+    }
+
     private void actualizarTablaFiltros(String tipo) {
         if (tipo.equals("")) {
             trabajos = fachada.getTrabajos();
+        } else if (tipo.equals("CLIENTE")) {
+            if (comboClientes.getSelectedIndex() != 0) {
+                trabajos = fachada.getTrabajosCliente(clientes.get(comboClientes.getSelectedIndex() - 1).getRFC());
+            } else {
+                trabajos = fachada.getTrabajos();
+            }
         } else {
             trabajos = fachada.getTrabajosTipo(tipo);
         }
@@ -67,11 +93,11 @@ public class PnlTrabajos extends javax.swing.JPanel {
         vaciarTablasYCombos();
         DefaultTableModel trabajosTM = (DefaultTableModel) tablaTrabajos.getModel();
         Object rowData[] = new Object[6];
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         for (int i = 0; i < trabajos.size(); i++) {
-            if(!trabajos.get(i).estaEliminado()){
+            if (!trabajos.get(i).estaEliminado()) {
                 rowData[0] = trabajos.get(i).getFolioTrabajo();
                 rowData[1] = trabajos.get(i).getCliente().getRazonSocial();
                 rowData[2] = trabajos.get(i).getFallaCliente();
@@ -81,18 +107,6 @@ public class PnlTrabajos extends javax.swing.JPanel {
                 trabajosTM.addRow(rowData);
             }
         }
-
-        DefaultComboBoxModel dcbmFolios = (DefaultComboBoxModel) comboFolios.getModel();
-        DefaultComboBoxModel dcbmClientes = (DefaultComboBoxModel) comboClientes.getModel();
-        dcbmFolios.addElement("FOLIOS");
-        dcbmClientes.addElement("CLIENTES");
-
-        for (Trabajo trabajo : trabajos) {
-            dcbmFolios.addElement(trabajo.getFolioTrabajo());
-            dcbmClientes.addElement(trabajo.getCliente().getRazonSocial());
-        }
-        comboFolios.setModel(dcbmFolios);
-        comboClientes.setModel(dcbmClientes);
         actualizarColumnas();
     }
 
@@ -100,12 +114,8 @@ public class PnlTrabajos extends javax.swing.JPanel {
         while (tablaTrabajos.getRowCount() > 0) {
             ((DefaultTableModel) tablaTrabajos.getModel()).removeRow(0);
         }
-        
-        ((DefaultComboBoxModel) comboClientes.getModel()).removeAllElements();
-        
-        ((DefaultComboBoxModel) comboFolios.getModel()).removeAllElements();
     }
-    
+
     private void actualizarColumnas() {
         tablaTrabajos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -145,7 +155,6 @@ public class PnlTrabajos extends javax.swing.JPanel {
         btn_Preventivo = new javax.swing.JButton();
         btn_Total = new javax.swing.JButton();
         btn_Parcial = new javax.swing.JButton();
-        comboFolios = new javax.swing.JComboBox<>();
         comboClientes = new javax.swing.JComboBox<>();
         opt_Buscar = new javax.swing.JLabel();
 
@@ -266,6 +275,12 @@ public class PnlTrabajos extends javax.swing.JPanel {
             }
         });
 
+        comboClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboClientesActionPerformed(evt);
+            }
+        });
+
         opt_Buscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
         opt_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -302,9 +317,7 @@ public class PnlTrabajos extends javax.swing.JPanel {
                                 .addComponent(btn_Parcial, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(comboFolios, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(opt_Buscar)))))
                 .addGap(25, 25, 25))
@@ -324,8 +337,7 @@ public class PnlTrabajos extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(opt_Buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(comboClientes)
-                    .addComponent(comboFolios))
+                    .addComponent(comboClientes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(opt_Eliminar)
@@ -339,10 +351,10 @@ public class PnlTrabajos extends javax.swing.JPanel {
         int index = tablaTrabajos.getSelectedRow();
         if (index >= 0) {
             int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas eliminar este trabajo?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if(showConfirmDialog == JOptionPane.YES_OPTION){
+            if (showConfirmDialog == JOptionPane.YES_OPTION) {
                 String razonDeEliminacion = JOptionPane.showInputDialog(this, "Especifica la causa o razón de la eliminación de este trabajo", "Razón de Eliminación", JOptionPane.QUESTION_MESSAGE);
                 trabajos.get(index).setRazonDeEliminacion(razonDeEliminacion);
-                
+
                 fachada.editarTrabajo(trabajos.get(index));
             }
         } else {
@@ -394,8 +406,12 @@ public class PnlTrabajos extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_ParcialActionPerformed
 
     private void opt_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_BuscarMouseClicked
-        // TODO add your handling code here:
+        actualizarTablaFiltros("CLIENTE");
     }//GEN-LAST:event_opt_BuscarMouseClicked
+
+    private void comboClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboClientesActionPerformed
+
+    }//GEN-LAST:event_comboClientesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Evaluativo;
@@ -404,7 +420,6 @@ public class PnlTrabajos extends javax.swing.JPanel {
     private javax.swing.JButton btn_Todos;
     private javax.swing.JButton btn_Total;
     private javax.swing.JComboBox<String> comboClientes;
-    private javax.swing.JComboBox<String> comboFolios;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel opt_Agregar;

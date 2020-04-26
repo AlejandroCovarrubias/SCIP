@@ -24,6 +24,7 @@ public interface INegocio {
     List<Trabajo> getTrabajos();
     List<Trabajo> getTrabajosTipo(String tipo);
     List<Trabajo> getTrabajosFecha(Date fecha);
+    List<Trabajo> getTrabajosCliente(String cliente);
     int getTrabajosCount();
     
     //Clientes

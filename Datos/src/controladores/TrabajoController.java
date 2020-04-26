@@ -232,12 +232,25 @@ public class TrabajoController implements Serializable {
         }
     }
     
-    public List<Trabajo> findTrabajoEntititiesType(String type){
+    public List<Trabajo> findTrabajoEntitiesType(String type){
         List<Trabajo> ftes = findTrabajoEntities();
         List<Trabajo> aux = new ArrayList<>();
         
         for (Trabajo fte : ftes) {
             if(fte.getTipoTrabajo().toString().equals(type)){
+                aux.add(fte);
+            }
+        }
+        
+        return aux; 
+    }
+    
+    public List<Trabajo> findTrabajoEntititesClient(String client){
+        List<Trabajo> ftes = findTrabajoEntities();
+        List<Trabajo> aux = new ArrayList<>();
+        
+        for (Trabajo fte : ftes) {
+            if(fte.getCliente().getRFC().equals(client)){
                 aux.add(fte);
             }
         }

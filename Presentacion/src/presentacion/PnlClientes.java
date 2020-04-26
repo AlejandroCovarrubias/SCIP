@@ -84,7 +84,6 @@ public class PnlClientes extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
         opt_Agregar = new javax.swing.JLabel();
         opt_Eliminar = new javax.swing.JLabel();
         opt_Editar = new javax.swing.JLabel();
@@ -95,13 +94,6 @@ public class PnlClientes extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1044, 570));
         setMinimumSize(new java.awt.Dimension(1044, 570));
         setPreferredSize(new java.awt.Dimension(1044, 570));
-
-        jTextField1.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
-        jTextField1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        jTextField1.setMaximumSize(new java.awt.Dimension(350, 50));
-        jTextField1.setMinimumSize(new java.awt.Dimension(350, 50));
-        jTextField1.setName(""); // NOI18N
-        jTextField1.setPreferredSize(new java.awt.Dimension(350, 50));
 
         opt_Agregar.setFont(new java.awt.Font("Lato", 0, 24)); // NOI18N
         opt_Agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_add.png"))); // NOI18N
@@ -174,16 +166,13 @@ public class PnlClientes extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(opt_Editar)
                         .addGap(18, 18, 18)
-                        .addComponent(opt_Eliminar))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(opt_Eliminar)))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(67, 67, 67)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -227,7 +216,6 @@ public class PnlClientes extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel opt_Agregar;
     private javax.swing.JLabel opt_Editar;
     private javax.swing.JLabel opt_Eliminar;

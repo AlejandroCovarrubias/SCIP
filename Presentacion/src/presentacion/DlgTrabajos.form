@@ -42,7 +42,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+              <Component id="jPanel1" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -124,10 +128,10 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="txtModal">
           <Properties>
+            <Property name="text" type="java.lang.String" value="MODALIDAD"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lato" size="24" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="MODALIDAD"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -207,10 +211,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
+                <Property name="text" type="java.lang.String" value="#"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="#"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="textFolio">
@@ -222,10 +226,10 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Tipo:"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Tipo:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JRadioButton" name="radioEvaluativo">
@@ -286,11 +290,11 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="comboClientes">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Lato" size="12" style="0"/>
-                </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="0"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Lato" size="12" style="0"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -318,10 +322,10 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Fecha estimada de entrega:"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lato" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Fecha estimada de entrega:"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel3">
@@ -370,10 +374,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
+                <Property name="text" type="java.lang.String" value="FALLA DESCRITA POR EL CLIENTE"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="FALLA DESCRITA POR EL CLIENTE"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -386,20 +390,20 @@
                 <Component class="javax.swing.JTextArea" name="textArea_Descrita">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="rows" type="int" value="5"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lato" size="12" style="0"/>
                     </Property>
-                    <Property name="rows" type="int" value="5"/>
                   </Properties>
                 </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
+                <Property name="text" type="java.lang.String" value="FALLA LOCALIZADA"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="FALLA LOCALIZADA"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -412,10 +416,10 @@
                 <Component class="javax.swing.JTextArea" name="textArea_Localizada">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="rows" type="int" value="5"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Lato" size="12" style="0"/>
                     </Property>
-                    <Property name="rows" type="int" value="5"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -453,7 +457,7 @@
                               <Component id="btn_Aniadir" min="-2" pref="120" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="16" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
@@ -493,10 +497,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
+                <Property name="text" type="java.lang.String" value="DESGLOSE DE COSTOS"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="DESGLOSE DE COSTOS"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -542,10 +546,10 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="check_Insumo">
               <Properties>
+                <Property name="text" type="java.lang.String" value="INSUMO"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="INSUMO"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="check_InsumoActionPerformed"/>
@@ -553,10 +557,10 @@
             </Component>
             <Component class="javax.swing.JButton" name="btn_Aniadir">
               <Properties>
+                <Property name="text" type="java.lang.String" value="A&#xd1;ADIR"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="A&#xd1;ADIR"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_AniadirActionPerformed"/>
@@ -564,36 +568,42 @@
             </Component>
             <Component class="javax.swing.JButton" name="btn_Quitar">
               <Properties>
+                <Property name="text" type="java.lang.String" value="QUITAR"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="QUITAR"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_QuitarActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_Modificar">
               <Properties>
+                <Property name="text" type="java.lang.String" value="MODIFICAR"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="MODIFICAR"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ModificarActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="text_Cantidad">
               <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lato" size="12" style="0"/>
                 </Property>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="btnModal">
           <Properties>
+            <Property name="text" type="java.lang.String" value="MODALIDAD"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lato" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="MODALIDAD"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModalActionPerformed"/>
@@ -601,10 +611,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnCancelar">
           <Properties>
+            <Property name="text" type="java.lang.String" value="CANCELAR"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lato" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="CANCELAR"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
