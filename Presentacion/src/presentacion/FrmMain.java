@@ -23,6 +23,8 @@ public class FrmMain extends javax.swing.JFrame {
     
     private PnlCalendar calendario;
     
+    private PnlInsumos pnlInsumos;
+    
 
     /**
      * Creates new form FrmMain
@@ -396,6 +398,15 @@ public class FrmMain extends javax.swing.JFrame {
         pnlPrincipal.removeAll();
         pnlPrincipal.revalidate();
         txtTitulo.setText("INSUMOS");
+        
+        //Consigue y ajusta el panel
+        this.pnlInsumos = PnlInsumos.getInstance(instance, this);
+        pnlInsumos.setSize(pnlPrincipal.getSize());
+        pnlInsumos.setBorder(pnlPrincipal.getBorder());
+        pnlPrincipal.add(pnlInsumos);
+        pnlInsumos.setVisible(true);
+        pnlInsumos.revalidate();
+        pnlInsumos.repaint();
     }//GEN-LAST:event_opt_insumosMouseClicked
 
     private void opt_usuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_usuariosMouseClicked

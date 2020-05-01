@@ -13,11 +13,11 @@ import entidades.Servicio;
 import entidades.TipoTrabajo;
 import entidades.Trabajo;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -54,25 +54,32 @@ public class DlgTrabajos extends javax.swing.JDialog {
         this.modal = mode;
         listaClientes();
 
+        TextPrompt folio = new TextPrompt("FOLIO DE TRABAJO", textFolio);
+        folio.changeAlpha(0.75f);
+        textFolio.setBorder(BorderFactory.createCompoundBorder(textFolio.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        TextPrompt concepto = new TextPrompt("CONCEPTO", text_Concepto);
+        concepto.changeAlpha(0.50f);
+        text_Concepto.setBorder(BorderFactory.createCompoundBorder(text_Concepto.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        TextPrompt costo = new TextPrompt("COSTO", text_Costo);
+        costo.changeAlpha(0.50f);
+        text_Costo.setBorder(BorderFactory.createCompoundBorder(text_Costo.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        TextPrompt cantidad = new TextPrompt("CANTIDAD", text_Cantidad);
+        cantidad.changeAlpha(0.50f);
+        text_Cantidad.setBorder(BorderFactory.createCompoundBorder(text_Cantidad.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
+        TextPrompt entrega = new TextPrompt("NOMBRE DE QUIEN ENTREGA", textNombreEntrega);
+        entrega.changeAlpha(0.75f);
+        textNombreEntrega.setBorder(BorderFactory.createCompoundBorder(textNombreEntrega.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
         if (mode == Modals.AGREGAR) {
             txtModal.setText("AGREGAR TRABAJO");
             btnModal.setText("AGREGAR");
             this.setTitle("AGREGAR TRABAJO");
-            TextPrompt folio = new TextPrompt("FOLIO DE TRABAJO", textFolio);
-            folio.changeAlpha(0.75f);
+
             textFolio.setEnabled(false);
-
-            TextPrompt concepto = new TextPrompt("CONCEPTO", text_Concepto);
-            concepto.changeAlpha(0.75f);
-
-            TextPrompt costo = new TextPrompt("COSTO", text_Costo);
-            costo.changeAlpha(0.75f);
-
-            TextPrompt cantidad = new TextPrompt("CANTIDAD", text_Cantidad);
-            cantidad.changeAlpha(0.75f);
-
-            TextPrompt entrega = new TextPrompt("NOMBRE DE QUIEN ENTREGA", textNombreEntrega);
-            entrega.changeAlpha(0.75f);
 
             Date todayDate = new Date();
 
@@ -89,15 +96,6 @@ public class DlgTrabajos extends javax.swing.JDialog {
             txtModal.setText("EDITAR TRABAJO");
             btnModal.setText("EDITAR");
             this.setTitle("EDITAR TRABAJO");
-
-            TextPrompt concepto = new TextPrompt("CONCEPTO", text_Concepto);
-            concepto.changeAlpha(0.75f);
-
-            TextPrompt costo = new TextPrompt("COSTO", text_Costo);
-            costo.changeAlpha(0.75f);
-
-            TextPrompt cantidad = new TextPrompt("CANTIDAD", text_Cantidad);
-            cantidad.changeAlpha(0.75f);
 
             textFolio.setText("" + trabajo.getFolioTrabajo());
             textFolio.setEnabled(false);
@@ -128,13 +126,69 @@ public class DlgTrabajos extends javax.swing.JDialog {
             }
 
             actualizarTablaConceptos();
-            //Poner los conceptos
+        } else if (mode == Modals.VER) {
+            txtModal.setText("VER TRABAJO");
+            btnModal.setText("ACEPTAR");
+            this.setTitle("VER TRABAJO");
+
+            textFolio.setText("" + trabajo.getFolioTrabajo());
+            textFolio.setEnabled(false);
+            textNombreEntrega.setText(trabajo.getNombreDeQuienEntrega());
+            textNombreEntrega.setEnabled(false);
+            textArea_Descrita.setText(trabajo.getFallaCliente());
+            textArea_Descrita.setEnabled(false);
+            textArea_Localizada.setText(trabajo.getFallaEncontrada());
+            textArea_Localizada.setEnabled(false);
+
+            datePicker.setDate(
+                    Instant.ofEpochMilli(trabajo.getFechaEstimada().getTime())
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+
+            datePicker.setEnabled(false);
+
+            for (int i = 0; i < clientes.size(); i++) {
+                if (clientes.get(i).equals(trabajo.getCliente())) {
+                    comboClientes.setSelectedIndex(i);
+                }
+            }
+            comboClientes.setEnabled(false);
+
+            String tipo = trabajo.getTipoTrabajo().toString();
+            if (tipo.equals("EVALUATIVO")) {
+                radioEvaluativo.setSelected(true);
+            } else if (tipo.equals("PREVENTIVO")) {
+                radioPreventivo.setSelected(true);
+            } else if (tipo.equals("TOTAL")) {
+                radioTotal.setSelected(true);
+            } else if (tipo.equals("PARCIAL")) {
+                radioParcial.setSelected(true);
+            }
+
+            radioEvaluativo.setEnabled(false);
+            radioPreventivo.setEnabled(false);
+            radioTotal.setEnabled(false);
+            radioParcial.setEnabled(false);
+
+            btnModal.setVisible(false);
+            btnCancelar.setText("SALIR");
+            tablaConceptos.setEnabled(false);
+            btn_Aniadir.setEnabled(false);
+            btn_Modificar.setEnabled(false);
+            btn_Quitar.setEnabled(false);
+            textArea_Descrita.setEnabled(false);
+            textArea_Localizada.setEnabled(false);
+            text_Cantidad.setEnabled(false);
+            text_Concepto.setEnabled(false);
+            text_Costo.setEnabled(false);
+            check_Insumo.setEnabled(false);
+            opt_AgregarCliente.setEnabled(false);
+
+            actualizarTablaConceptos();
         }
     }
 
     private String validarFecha() {
-        Date fechaActual = new Date();
-        Date fechaSeleccionada;
 
         if (datePicker.getDateStringOrEmptyString().equals("")) {
             return "Fecha con formato incorrecto";
@@ -578,23 +632,20 @@ public class DlgTrabajos extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnModal, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -658,7 +709,7 @@ public class DlgTrabajos extends javax.swing.JDialog {
 
                 resultado = fachada.editarTrabajo(trabajoTemp);
             } else {
-                resultado = validar();
+                resultado = validar;
             }
         }
         JOptionPane.showMessageDialog(this, resultado, this.modal.toString(), JOptionPane.INFORMATION_MESSAGE);
@@ -668,9 +719,13 @@ public class DlgTrabajos extends javax.swing.JDialog {
     }//GEN-LAST:event_btnModalActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas cancelar esta acción?", "Cancelar", JOptionPane.YES_NO_OPTION);
+        if (modal != Modals.VER) {
+            int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas cancelar esta acción?", "Cancelar", JOptionPane.YES_NO_OPTION);
 
-        if (showConfirmDialog == JOptionPane.YES_OPTION) {
+            if (showConfirmDialog == JOptionPane.YES_OPTION) {
+                this.dispose();
+            }
+        }else{
             this.dispose();
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -691,17 +746,20 @@ public class DlgTrabajos extends javax.swing.JDialog {
             } else {
                 if (!text_Cantidad.getText().equals("") || text_Cantidad.getText().matches("^\\d+")) {
                     this.trabajo.getConceptos().add(new Insumo(Integer.valueOf(text_Cantidad.getText()), null, text_Concepto.getText(), Double.valueOf(text_Costo.getText())));
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Coloque una cantidad no decimal", "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             text_Concepto.setText("");
             text_Cantidad.setText("");
             text_Costo.setText("");
+            check_Insumo.setSelected(false);
+            text_Cantidad.setEnabled(false);
             actualizarTablaConceptos();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Rellene todos los campos", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }//GEN-LAST:event_btn_AniadirActionPerformed
 
     private void opt_AgregarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_AgregarClienteMouseClicked
@@ -711,11 +769,33 @@ public class DlgTrabajos extends javax.swing.JDialog {
     }//GEN-LAST:event_opt_AgregarClienteMouseClicked
 
     private void btn_ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ModificarActionPerformed
-        // TODO add your handling code here:
+        int index = tablaConceptos.getSelectedRow();
+
+        if (index >= 0) {
+            Concepto conc = trabajo.getConceptos().get(index);
+            trabajo.getConceptos().remove(index);
+            actualizarTablaConceptos();
+
+            text_Concepto.setText(conc.getDescripcion());
+            text_Costo.setText("" + conc.getCosto());
+
+            if (conc instanceof Insumo) {
+                text_Cantidad.setText("" + ((Insumo) conc).getCantidad());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un concepto de la tabla", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btn_ModificarActionPerformed
 
     private void btn_QuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_QuitarActionPerformed
-        // TODO add your handling code here:
+        int index = tablaConceptos.getSelectedRow();
+
+        if (index >= 0) {
+            trabajo.getConceptos().remove(index);
+            actualizarTablaConceptos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un concepto de la tabla", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btn_QuitarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

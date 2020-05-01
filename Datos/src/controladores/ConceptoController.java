@@ -7,6 +7,7 @@ package controladores;
 
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Concepto;
+import entidades.Insumo;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -144,18 +145,46 @@ public class ConceptoController implements Serializable {
             em.close();
         }
     }
-    
-    public List<Concepto> findConceptoEntitiesFolioTrabajo(int folio){
+
+    public List<Concepto> findConceptoEntitiesFolioTrabajo(int folio) {
         List<Concepto> fces = findConceptoEntities();
         List<Concepto> aux = new ArrayList<>();
-        
+
         for (Concepto conc : fces) {
-            if(conc.getTrabajo().getFolioTrabajo() == folio){
-                aux.add(conc);
+            if (conc.getTrabajo() != null) {
+                if (conc.getTrabajo().getFolioTrabajo() == folio) {
+                    aux.add(conc);
+                }
             }
         }
-        
-        return aux; 
+
+        return aux;
+    }
+
+    public List<Insumo> findConceptoEntitiesInsumos() {
+        List<Concepto> fces = findConceptoEntities();
+        List<Insumo> aux = new ArrayList<>();
+
+        for (Concepto conc : fces) {
+            if (conc instanceof Insumo) {
+                aux.add((Insumo) conc);
+            }
+        }
+
+        return aux;
+    }
+
+    public List<Insumo> findConceptoInsumosEntitiesFolioTrabajo(int folio) {
+        List<Concepto> fces = findConceptoEntities();
+        List<Insumo> aux = new ArrayList<>();
+
+        for (Concepto conc : fces) {
+            if (conc instanceof Insumo && conc.getTrabajo().getFolioTrabajo() == folio) {
+                aux.add((Insumo) conc);
+            }
+        }
+
+        return aux;
     }
 
     public Concepto findConcepto(int id) {
@@ -179,5 +208,8 @@ public class ConceptoController implements Serializable {
             em.close();
         }
     }
-    
+
+    public int getConceptoInsumoCount() {
+        return findConceptoEntitiesInsumos().size();
+    }
 }

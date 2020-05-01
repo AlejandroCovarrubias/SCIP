@@ -7,7 +7,6 @@ package negocio;
 
 import controladores.*;
 import controladores.exceptions.*;
-import entidades.Concepto;
 import entidades.Trabajo;
 import java.util.Date;
 import java.util.List;

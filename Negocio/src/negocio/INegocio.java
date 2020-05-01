@@ -6,6 +6,7 @@
 package negocio;
 
 import entidades.Cliente;
+import entidades.Insumo;
 import entidades.Trabajo;
 import entidades.Usuario;
 import java.util.Date;
@@ -35,6 +36,15 @@ public interface INegocio {
     Cliente getClienteRFC(String RFC);
     List<Cliente> getClientes();
     int getClientesCount();
+    
+    //Insumos
+    String agregarInsumo(Insumo insumo);
+    String editarInsumo(Insumo insumo);
+    String eliminarInsumo(Insumo insumo);
+    Insumo getInsumo(int idConcepto);
+    List<Insumo> getInsumos();
+    List<Insumo> getInsumosTrabajo(int idTrabajo);
+    int getInsumosCount();
     
     //Usuarios
     Usuario getUsuario(int id);

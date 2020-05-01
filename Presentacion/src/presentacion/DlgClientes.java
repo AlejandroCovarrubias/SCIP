@@ -6,6 +6,7 @@
 package presentacion;
 
 import entidades.Cliente;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import negocio.INegocio;
 import presentacion.utils.TextPrompt;
@@ -40,12 +41,20 @@ public class DlgClientes extends javax.swing.JDialog {
             this.setTitle("AGREGAR CLIENTE");
             TextPrompt razon = new TextPrompt("NOMBRE DEL CLIENTE O RAZON SOCIAL", textRazon);
             razon.changeAlpha(0.75f);
+            textRazon.setBorder(BorderFactory.createCompoundBorder(textRazon.getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            
             TextPrompt rfc = new TextPrompt("REGISTRO FEDERAL DEL CONTRIBUYENTE (RFC)", textRFC);
             rfc.changeAlpha(0.75f);
+            textRFC.setBorder(BorderFactory.createCompoundBorder(textRFC.getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            
             TextPrompt telefono = new TextPrompt("TELEFONO", textTelefono);
             telefono.changeAlpha(0.75f);
+            textTelefono.setBorder(BorderFactory.createCompoundBorder(textTelefono.getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            
             TextPrompt correo = new TextPrompt("CORREO ELECTRÓNICO", textCorreo);
             correo.changeAlpha(0.75f);
+            textCorreo.setBorder(BorderFactory.createCompoundBorder(textCorreo.getBorder(), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            
         } else if (mode == Modals.EDITAR) {
             txtModal.setText("EDITAR CLIENTE");
             btnModal.setText("EDITAR");
@@ -123,25 +132,29 @@ public class DlgClientes extends javax.swing.JDialog {
         txtModal.setFont(new java.awt.Font("Lato", 1, 24)); // NOI18N
         txtModal.setText("MODALIDAD");
 
-        textRazon.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nombre o Razón Social", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lato", 1, 12))); // NOI18N
+        textRazon.setFont(new java.awt.Font("Lato", 0, 18)); // NOI18N
+        textRazon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         textRazon.setMaximumSize(new java.awt.Dimension(59, 30));
         textRazon.setMinimumSize(new java.awt.Dimension(59, 30));
         textRazon.setName(""); // NOI18N
         textRazon.setPreferredSize(new java.awt.Dimension(59, 30));
 
-        textTelefono.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Telefono", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lato", 1, 12))); // NOI18N
+        textTelefono.setFont(new java.awt.Font("Lato", 0, 18)); // NOI18N
+        textTelefono.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         textTelefono.setMaximumSize(new java.awt.Dimension(59, 30));
         textTelefono.setMinimumSize(new java.awt.Dimension(59, 30));
         textTelefono.setName(""); // NOI18N
         textTelefono.setPreferredSize(new java.awt.Dimension(59, 30));
 
-        textCorreo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Correo Electrónico", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lato", 1, 12))); // NOI18N
+        textCorreo.setFont(new java.awt.Font("Lato", 0, 18)); // NOI18N
+        textCorreo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         textCorreo.setMaximumSize(new java.awt.Dimension(59, 30));
         textCorreo.setMinimumSize(new java.awt.Dimension(59, 30));
         textCorreo.setName(""); // NOI18N
         textCorreo.setPreferredSize(new java.awt.Dimension(59, 30));
 
-        textRFC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "RFC", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lato", 1, 12))); // NOI18N
+        textRFC.setFont(new java.awt.Font("Lato", 0, 18)); // NOI18N
+        textRFC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         textRFC.setMaximumSize(new java.awt.Dimension(59, 30));
         textRFC.setMinimumSize(new java.awt.Dimension(59, 30));
         textRFC.setName(""); // NOI18N

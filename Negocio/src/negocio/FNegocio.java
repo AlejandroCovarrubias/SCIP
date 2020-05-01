@@ -8,6 +8,7 @@ package negocio;
 import controladores.DatosSCIP;
 import controladores.IDatos;
 import entidades.Cliente;
+import entidades.Insumo;
 import entidades.Trabajo;
 import entidades.Usuario;
 import java.util.ArrayList;
@@ -24,12 +25,14 @@ public class FNegocio implements INegocio{
     ControlCliente ctrlCliente;
     ControlTrabajo ctrlTrabajo;
     ControlUsuario ctrlUsuario;
+    ControlInsumo ctrlInsumo;
     
     public FNegocio(){
         instance = DatosSCIP.getFacade();
         ctrlCliente = new ControlCliente(instance);
         ctrlTrabajo = new ControlTrabajo(instance);
         ctrlUsuario = new ControlUsuario(instance);
+        ctrlInsumo = new ControlInsumo(instance);
     }
 
     @Override
@@ -101,7 +104,7 @@ public class FNegocio implements INegocio{
 
     @Override
     public int getTrabajosCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ctrlTrabajo.getTrabajosCount();
     }
 
     @Override
@@ -139,6 +142,41 @@ public class FNegocio implements INegocio{
         return ctrlCliente.getClientesCount();
     } 
 
+    @Override
+    public String agregarInsumo(Insumo insumo) {
+        return ctrlInsumo.agregar(insumo);
+    }
+
+    @Override
+    public String editarInsumo(Insumo insumo) {
+        return ctrlInsumo.editar(insumo);
+    }
+
+    @Override
+    public String eliminarInsumo(Insumo insumo) {
+        return ctrlInsumo.eliminar(insumo);
+    }
+
+    @Override
+    public Insumo getInsumo(int idConcepto) {
+        return ctrlInsumo.getInsumo(idConcepto);
+    }
+
+    @Override
+    public List<Insumo> getInsumos() {
+        return ctrlInsumo.getInsumos();
+    }
+
+    @Override
+    public List<Insumo> getInsumosTrabajo(int idTrabajo) {
+        return ctrlInsumo.getInsumosTrabajo(idTrabajo);
+    }
+
+    @Override
+    public int getInsumosCount() {
+        return ctrlInsumo.getInsumosCount();
+    }
+    
     @Override
     public Usuario getUsuario(int id) {
         return ctrlUsuario.getUsuario(id);

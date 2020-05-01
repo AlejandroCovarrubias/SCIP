@@ -41,10 +41,11 @@ public interface IDatos {
     void editarConcepto(Concepto concepto) throws NonexistentEntityException, Exception;
     void eliminarConcepto(Concepto concepto) throws NonexistentEntityException, Exception;
     Concepto getConcepto(int idConcepto);
-    Concepto getConceptoTipo(String tipo);
     List<Concepto> getConceptos();
-    List<Concepto> getConceptosTipo(String tipo);
-    List<Concepto> getConceptosTrabajo(int folioTrabajo);
+    List<Insumo> getConceptosInsumos();
+    List<Insumo> getConceptosInsumosTrabajo(int folioTrabajo);
+    int getConceptosCount();
+    int getConceptosInsumosCount();
     
     //Usuarios
     void agregarUsuario(Usuario usuario) throws PreexistingEntityException, Exception;

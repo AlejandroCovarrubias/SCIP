@@ -54,6 +54,22 @@ public class FDatos implements IDatos {
 
     @Override
     public void editarTrabajo(Trabajo trabajo) throws NonexistentEntityException, Exception {
+        
+        List<Concepto> eliminar = conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo());
+        for (Concepto concepto : eliminar) {
+            eliminarConcepto(concepto);
+        }
+        
+        int antes = conceptoCtrl.getConceptoCount();
+        
+        for (Concepto concepto : trabajo.getConceptos()) {
+            conceptoCtrl.create(concepto);
+        }
+
+        List<Concepto> temp = conceptoCtrl.findConceptoEntities(trabajo.getConceptos().size(), antes);
+
+        trabajo.setConceptos(temp);
+
         trabajoCtrl.edit(trabajo);
     }
 
@@ -93,15 +109,15 @@ public class FDatos implements IDatos {
     public List<Trabajo> getTrabajosFecha(Date fecha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
-    public List<Trabajo> getTrabajosCliente(String cliente){
+    public List<Trabajo> getTrabajosCliente(String cliente) {
         List<Trabajo> fte = trabajoCtrl.findTrabajoEntititesClient(cliente);
-        
+
         for (Trabajo trabajo : fte) {
             trabajo.setConceptos(conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo()));
         }
-        
+
         return fte;
     }
 
@@ -166,23 +182,28 @@ public class FDatos implements IDatos {
     }
 
     @Override
-    public Concepto getConceptoTipo(String tipo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public List<Concepto> getConceptos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return conceptoCtrl.findConceptoEntities();
     }
 
     @Override
-    public List<Concepto> getConceptosTipo(String tipo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Insumo> getConceptosInsumos() {
+        return conceptoCtrl.findConceptoEntitiesInsumos();
     }
 
     @Override
-    public List<Concepto> getConceptosTrabajo(int folioTrabajo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Insumo> getConceptosInsumosTrabajo(int folioTrabajo) {
+        return conceptoCtrl.findConceptoInsumosEntitiesFolioTrabajo(folioTrabajo);
+    }
+
+    @Override
+    public int getConceptosCount() {
+        return conceptoCtrl.getConceptoCount();
+    }
+
+    @Override
+    public int getConceptosInsumosCount() {
+        return conceptoCtrl.getConceptoInsumoCount();
     }
 
     @Override

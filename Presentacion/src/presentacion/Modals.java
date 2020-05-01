@@ -10,5 +10,5 @@ package presentacion;
  * @author Alejandro Galindo
  */
 public enum Modals {
-    AGREGAR, EDITAR
+    AGREGAR, EDITAR, VER
 }
