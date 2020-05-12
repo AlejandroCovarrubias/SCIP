@@ -78,6 +78,10 @@ public class ControlInsumo {
         return instance.getConceptosInsumosTrabajo(folioTrabajo);
     }
     
+    List<Insumo> getInsumosLike(String like){
+        return instance.getConceptosLike(like);
+    }
+    
     int getInsumosCount(){
         return instance.getConceptosCount();
     }

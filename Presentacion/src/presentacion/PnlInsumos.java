@@ -71,6 +71,26 @@ public class PnlInsumos extends javax.swing.JPanel {
             insumosTM.addRow(rowData);
         }
     }
+    
+    private void actualizarTablaLike(String like) {
+        insumos = fachada.getInsumosLike(like);
+        vaciarTablas();
+        DefaultTableModel insumosTM = (DefaultTableModel) tablaInsumos.getModel();
+        Object rowData[] = new Object[4];
+
+        for (int i = 0; i < insumos.size(); i++) {
+            rowData[0] = insumos.get(i).getDescripcion();
+            rowData[1] = "$" + insumos.get(i).getCosto();
+            rowData[2] = insumos.get(i).getCantidad();
+
+            if (insumos.get(i).getTrabajo() == null) {
+                rowData[3] = "Este insumo no tiene un trabajo relacionado";
+            } else {
+                rowData[3] = insumos.get(i).getTrabajo().getFolioTrabajo();
+            }
+            insumosTM.addRow(rowData);
+        }
+    }
 
     private void vaciarTablas() {
         while (tablaInsumos.getRowCount() > 0) {
@@ -92,6 +112,8 @@ public class PnlInsumos extends javax.swing.JPanel {
         opt_Editar = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaInsumos = new javax.swing.JTable();
+        optBuscar = new javax.swing.JLabel();
+        tBuscar = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1044, 570));
@@ -161,6 +183,15 @@ public class PnlInsumos extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tablaInsumos);
 
+        optBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
+        optBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                optBuscarMouseClicked(evt);
+            }
+        });
+
+        tBuscar.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,13 +205,21 @@ public class PnlInsumos extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(opt_Editar)
                         .addGap(18, 18, 18)
-                        .addComponent(opt_Eliminar)))
+                        .addComponent(opt_Eliminar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(optBuscar)))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(optBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(tBuscar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -240,16 +279,6 @@ public class PnlInsumos extends javax.swing.JPanel {
         }
         actualizarTabla();
 
-//        int index = tablaInsumos.getSelectedRow();
-//        if(index >= 0){
-//            int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas eliminar al Cliente con RFC" + clientes.get(index).getRFC() + "?", "Confirmación", JOptionPane.YES_NO_OPTION);
-//            if(showConfirmDialog == JOptionPane.YES_OPTION){
-//                fachada.eliminarCliente(this.clientes.get(index));
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(this, "Escoge un Cliente de la lista", "No se puede eliminar", JOptionPane.OK_OPTION);
-//        }
-//        actualizarTabla();
     }//GEN-LAST:event_opt_EliminarMouseClicked
 
     private void tablaInsumosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaInsumosMouseClicked
@@ -267,12 +296,19 @@ public class PnlInsumos extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tablaInsumosMouseClicked
 
+    private void optBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optBuscarMouseClicked
+        String buscar = tBuscar.getText();
+        actualizarTablaLike(buscar);
+    }//GEN-LAST:event_optBuscarMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel optBuscar;
     private javax.swing.JLabel opt_Agregar;
     private javax.swing.JLabel opt_Editar;
     private javax.swing.JLabel opt_Eliminar;
+    private javax.swing.JTextField tBuscar;
     private javax.swing.JTable tablaInsumos;
     // End of variables declaration//GEN-END:variables
 }

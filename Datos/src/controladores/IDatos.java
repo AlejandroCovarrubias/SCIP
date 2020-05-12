@@ -34,6 +34,7 @@ public interface IDatos {
     Cliente getCliente(int idCliente);
     Cliente getClienteRFC(String RFC);
     List<Cliente> getClientes();
+    List<Cliente> getClientesLike(String like);
     int getClientesCount();
     
     //Conceptos
@@ -44,6 +45,7 @@ public interface IDatos {
     List<Concepto> getConceptos();
     List<Insumo> getConceptosInsumos();
     List<Insumo> getConceptosInsumosTrabajo(int folioTrabajo);
+    List<Insumo> getConceptosLike(String like);
     int getConceptosCount();
     int getConceptosInsumosCount();
     

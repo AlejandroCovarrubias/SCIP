@@ -54,14 +54,14 @@ public class FDatos implements IDatos {
 
     @Override
     public void editarTrabajo(Trabajo trabajo) throws NonexistentEntityException, Exception {
-        
+
         List<Concepto> eliminar = conceptoCtrl.findConceptoEntitiesFolioTrabajo(trabajo.getFolioTrabajo());
         for (Concepto concepto : eliminar) {
             eliminarConcepto(concepto);
         }
-        
+
         int antes = conceptoCtrl.getConceptoCount();
-        
+
         for (Concepto concepto : trabajo.getConceptos()) {
             conceptoCtrl.create(concepto);
         }
@@ -157,6 +157,11 @@ public class FDatos implements IDatos {
     }
 
     @Override
+    public List<Cliente> getClientesLike(String like) {
+        return clienteCtrl.findClienteLike(like);
+    }
+
+    @Override
     public int getClientesCount() {
         return clienteCtrl.getClienteCount();
     }
@@ -194,6 +199,11 @@ public class FDatos implements IDatos {
     @Override
     public List<Insumo> getConceptosInsumosTrabajo(int folioTrabajo) {
         return conceptoCtrl.findConceptoInsumosEntitiesFolioTrabajo(folioTrabajo);
+    }
+
+    @Override
+    public List<Insumo> getConceptosLike(String like) {
+        return conceptoCtrl.findConceptoLike(like);
     }
 
     @Override

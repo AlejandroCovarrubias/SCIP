@@ -22,19 +22,20 @@ import negocio.INegocio;
  * @author Alejandro Galindo
  */
 public class PnlClientes extends javax.swing.JPanel {
-    
+
     private static PnlClientes instance;
-    
+
     private INegocio fachada;
-    
+
     private FrmMain parent;
-    
+
     private Cliente cliente;
-    
+
     private List<Cliente> clientes = new ArrayList<>();
 
     /**
      * Creates new form PnlClientes
+     *
      * @param instance
      */
     private PnlClientes(INegocio fachada, FrmMain parent) {
@@ -45,9 +46,9 @@ public class PnlClientes extends javax.swing.JPanel {
         this.parent = parent;
         actualizarTabla();
     }
-    
-    public static PnlClientes getInstance(INegocio fachada, FrmMain parent){
-        if(instance == null){
+
+    public static PnlClientes getInstance(INegocio fachada, FrmMain parent) {
+        if (instance == null) {
             instance = new PnlClientes(fachada, parent);
         }
         instance.actualizarTabla();
@@ -56,6 +57,23 @@ public class PnlClientes extends javax.swing.JPanel {
 
     private void actualizarTabla() {
         clientes = fachada.getClientes();
+
+        vaciarTablas();
+        DefaultTableModel clientesTM = (DefaultTableModel) tablaClientes.getModel();
+        Object rowData[] = new Object[4];
+
+        for (int i = 0; i < clientes.size(); i++) {
+            rowData[0] = clientes.get(i).getRFC();
+            rowData[1] = clientes.get(i).getRazonSocial();
+            rowData[2] = clientes.get(i).getTelefono();
+            rowData[3] = clientes.get(i).getCorreo();
+            clientesTM.addRow(rowData);
+        }
+    }
+    
+    private void actualizarTablaLike(String like) {
+        clientes = fachada.getClientesLike(like);
+
         vaciarTablas();
         DefaultTableModel clientesTM = (DefaultTableModel) tablaClientes.getModel();
         Object rowData[] = new Object[4];
@@ -89,6 +107,8 @@ public class PnlClientes extends javax.swing.JPanel {
         opt_Editar = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaClientes = new javax.swing.JTable();
+        txtBuscar = new javax.swing.JTextField();
+        optBuscar = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1044, 570));
@@ -153,6 +173,15 @@ public class PnlClientes extends javax.swing.JPanel {
         tablaClientes.setSelectionForeground(new java.awt.Color(102, 102, 102));
         jScrollPane2.setViewportView(tablaClientes);
 
+        txtBuscar.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
+
+        optBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icon_search.png"))); // NOI18N
+        optBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                optBuscarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,20 +195,28 @@ public class PnlClientes extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(opt_Editar)
                         .addGap(18, 18, 18)
-                        .addComponent(opt_Eliminar)))
+                        .addComponent(opt_Eliminar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(optBuscar)))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtBuscar)
+                    .addComponent(optBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(opt_Eliminar)
                     .addComponent(opt_Editar)
                     .addComponent(opt_Agregar))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -191,10 +228,10 @@ public class PnlClientes extends javax.swing.JPanel {
 
     private void opt_EditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_EditarMouseClicked
         int index = tablaClientes.getSelectedRow();
-        if(index >= 0){
+        if (index >= 0) {
             DlgClientes dlgClientes = new DlgClientes(parent, true, Modals.EDITAR, this.clientes.get(index), this.fachada);
             dlgClientes.setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Escoge un Cliente de la lista", "No se puede editar", JOptionPane.OK_OPTION);
         }
         actualizarTabla();
@@ -202,23 +239,30 @@ public class PnlClientes extends javax.swing.JPanel {
 
     private void opt_EliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opt_EliminarMouseClicked
         int index = tablaClientes.getSelectedRow();
-        if(index >= 0){
+        if (index >= 0) {
             int showConfirmDialog = JOptionPane.showConfirmDialog(this, "¿Estás seguro que deseas eliminar al Cliente con RFC" + clientes.get(index).getRFC() + "?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if(showConfirmDialog == JOptionPane.YES_OPTION){
+            if (showConfirmDialog == JOptionPane.YES_OPTION) {
                 fachada.eliminarCliente(this.clientes.get(index));
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Escoge un Cliente de la lista", "No se puede eliminar", JOptionPane.OK_OPTION);
         }
         actualizarTabla();
     }//GEN-LAST:event_opt_EliminarMouseClicked
 
+    private void optBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optBuscarMouseClicked
+        String buscar = txtBuscar.getText();
+        actualizarTablaLike(buscar);
+    }//GEN-LAST:event_optBuscarMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel optBuscar;
     private javax.swing.JLabel opt_Agregar;
     private javax.swing.JLabel opt_Editar;
     private javax.swing.JLabel opt_Eliminar;
     private javax.swing.JTable tablaClientes;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

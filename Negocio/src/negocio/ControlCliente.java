@@ -72,6 +72,10 @@ class ControlCliente {
         return instance.getClientes();
     }
     
+    List<Cliente> getClientesLike(String like){
+        return instance.getClientesLike(like);
+    }
+    
     int getClientesCount(){
         return instance.getClientesCount();
     }

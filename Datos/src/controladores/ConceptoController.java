@@ -187,6 +187,31 @@ public class ConceptoController implements Serializable {
         return aux;
     }
 
+    public List<Insumo> findConceptoLike(String like) {
+        List<Insumo> aux = new ArrayList<>();
+        
+        EntityManager em = getEntityManager();
+
+        String last = "%" + like + "%";
+
+        Query query = em.createQuery("SELECT p FROM Concepto AS p WHERE p.descripcion like '" + last + "'", Concepto.class);
+
+        try {
+            List<Concepto> conceptos = query.getResultList();
+
+            for (Concepto conc : conceptos) {
+                if (conc instanceof Insumo) {
+                    aux.add((Insumo) conc);
+                }
+            }
+
+        } finally {
+            em.close();
+        }
+        
+        return aux;
+    }
+
     public Concepto findConcepto(int id) {
         EntityManager em = getEntityManager();
         try {

@@ -35,6 +35,7 @@ public interface INegocio {
     Cliente getCliente(int id);
     Cliente getClienteRFC(String RFC);
     List<Cliente> getClientes();
+    List<Cliente> getClientesLike(String like);
     int getClientesCount();
     
     //Insumos
@@ -44,6 +45,7 @@ public interface INegocio {
     Insumo getInsumo(int idConcepto);
     List<Insumo> getInsumos();
     List<Insumo> getInsumosTrabajo(int idTrabajo);
+    List<Insumo> getInsumosLike(String like);
     int getInsumosCount();
     
     //Usuarios

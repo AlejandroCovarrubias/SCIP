@@ -130,6 +130,21 @@ class ClienteController implements Serializable {
         }
     }
     
+    public List<Cliente> findClienteLike(String like){
+        EntityManager em = getEntityManager();
+        
+        String last = "%" + like + "%";
+        
+        Query query = em.createQuery("SELECT p FROM Cliente AS p WHERE p.razonSocial like '" + last + "'", Cliente.class);
+         
+        try {
+            List<Cliente> result = query.getResultList();
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+    
     public Cliente findClienteRFC(String RFC){
         EntityManager em = getEntityManager();
         try{
