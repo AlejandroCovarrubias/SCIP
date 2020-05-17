@@ -5,7 +5,6 @@
  */
 package presentacion;
 
-import entidades.Cliente;
 import entidades.Insumo;
 import java.util.ArrayList;
 import java.util.List;
